@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace RallyXtreme
 {
@@ -10,8 +11,12 @@ namespace RallyXtreme
     public class Game1 : Game
     {
         Texture2D car;
+        Texture2D background;
         Vector2 carPosition;
+        float carRotation;
         float carSpeed;
+        SpriteFont font;
+        int score = 0;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
@@ -37,7 +42,8 @@ namespace RallyXtreme
             carPosition = new
                 Vector2(graphics.PreferredBackBufferWidth / 2,
                 graphics.PreferredBackBufferHeight / 2);
-            carSpeed = 100f;
+            carSpeed = 250f;
+            carRotation = 0f;
 
             base.Initialize();
         }
@@ -53,6 +59,8 @@ namespace RallyXtreme
 
             // TODO: use this.Content to load your game content here
             car = Content.Load<Texture2D>("goodcar70x70mk1");
+            background = Content.Load<Texture2D>("bg");
+            font = Content.Load<SpriteFont>("TestFont");
             // calls graphical stuff mainly
         }
 
@@ -72,21 +80,44 @@ namespace RallyXtreme
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            // gameTime.ElapsedGameTime.Totalseconds is used here to ensure consistent timings between activations because each update
+            // frame is not neccesarily the same length.
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             var kstate = Keyboard.GetState();
 
-            if (kstate.IsKeyDown(Keys.Up))
+            if (kstate.IsKeyDown(Keys.W) || kstate.IsKeyDown(Keys.Up))
+            {
                 carPosition.Y -= carSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            if (kstate.IsKeyDown(Keys.Down))
+                carRotation = 0f;
+            }
+            if (kstate.IsKeyDown(Keys.S) || kstate.IsKeyDown(Keys.Down))
+            {
                 carPosition.Y += carSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            if (kstate.IsKeyDown(Keys.Left))
+                carRotation = (float)Math.PI;
+            }
+            if (kstate.IsKeyDown(Keys.A) || kstate.IsKeyDown(Keys.Left))
+            {
                 carPosition.X -= carSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                carRotation = (float)Math.PI + 1.57079632679f;
+            }
 
-            if (kstate.IsKeyDown(Keys.Right))
+            if (kstate.IsKeyDown(Keys.D) || kstate.IsKeyDown(Keys.Right))
+            {
                 carPosition.X += carSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                carRotation = 1.57079632679f;
+            }
+
+            // This code makes sure that the car cannot leave the screen by comparing the location of the car to the size of the screen
+            carPosition.X = Math.Min(Math.Max(car.Width/2, carPosition.X), graphics.PreferredBackBufferWidth - car.Width/2);
+            carPosition.Y = Math.Min(Math.Max(car.Height/2, carPosition.Y), graphics.PreferredBackBufferHeight - car.Height/2);
+
+            //    N
+            //  # 0 # 
+            //W 3 # 1 E
+            //  # 2 #
+            //    S
+            score++;
 
             base.Update(gameTime);
             // TODO: Add your update logic here
@@ -108,11 +139,29 @@ namespace RallyXtreme
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            spriteBatch.Draw(car, carPosition, Color.White);
+            spriteBatch.Draw(background, new Vector2(0, 0), Color.White);
+            spriteBatch.Draw(car, carPosition, new Rectangle(0,0,70,70), Color.White, carRotation, new Vector2(35,35), 1.0f, SpriteEffects.None, 1);
+            spriteBatch.DrawString(font, $"SCORE = {score}", new Vector2(50, 50), Color.Black);
             spriteBatch.End();
 
             base.Draw(gameTime);
             // like update method, but for graphics only
         }
+
+        /* protected void carMovement(int direction)
+         {
+             if (direction == 0) ;
+                 carPosition.Y -= carSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+             if (kstate.IsKeyDown(Keys.S) || kstate.IsKeyDown(Keys.Down))
+                 carPosition.Y += carSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+             if (kstate.IsKeyDown(Keys.A) || kstate.IsKeyDown(Keys.Left))
+                 carPosition.X -= carSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+             if (kstate.IsKeyDown(Keys.D) || kstate.IsKeyDown(Keys.Right))
+                 carPosition.X += carSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+         }*/
     }
 }
