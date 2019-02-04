@@ -24,6 +24,9 @@ namespace RallyXtreme
         {
             
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth = 1600;
+            graphics.PreferredBackBufferHeight = 900;
+
             Content.RootDirectory = "Content";
         }
 
@@ -44,7 +47,7 @@ namespace RallyXtreme
                 graphics.PreferredBackBufferHeight / 2);
             carSpeed = 250f;
             carRotation = 0f;
-
+            
             base.Initialize();
         }
 
@@ -55,6 +58,7 @@ namespace RallyXtreme
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
+
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
@@ -135,6 +139,7 @@ namespace RallyXtreme
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
