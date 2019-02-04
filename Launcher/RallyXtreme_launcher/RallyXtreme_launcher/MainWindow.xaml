@@ -5,15 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RallyXtreme_launcher"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="600" ResizeMode="NoResize">
+        Title="Rally-Xtreme Launcher" Height="600" Width="600" ResizeMode="NoResize">
 
     <Grid Background="Gray">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
         <Image Margin="10,10,8.667,403.667" Source="logo.png" Stretch="Fill" Grid.ColumnSpan="4"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="1">
+                <BulletDecorator x:Name=""/>
+                <Button x:Name="ControlsButton" Content="Controls and preferences" Margin="50,375,50,150"/>
+                <Button x:Name="LevelSelectButton" Content="Level select" Margin="50,425,50,100"/>
+                <Button x:Name="StartButton" Content="Start!" Margin="50,475,50,50" Background="Orange" FontFamily="Arial" FontWeight="Black"/>
+            </Grid>
+            
+        </Grid>
     </Grid>
 </Window>
