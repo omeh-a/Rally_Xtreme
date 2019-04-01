@@ -41,7 +41,7 @@ namespace RallyXtreme
             // TODO: Add your initialization logic here.
             // Called after the constructor, used for calling
             // non-graphical stuff.
-
+            
             carPosition = new
                 Vector2(graphics.PreferredBackBufferWidth / 2,
                 graphics.PreferredBackBufferHeight / 2);
