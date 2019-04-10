@@ -8,8 +8,17 @@ namespace RallyXtreme
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
+
+
+    
+
     public class Game1 : Game
     {
+        public string mapDirectory = CacheLoad.getMap();
+        public string playerDirectory = CacheLoad.getPlayer();
+        public string aiDirectory = CacheLoad.getAi();
+        public int difficulty = CacheLoad.getDifficulty();
+        MapLoad.map gameMap = new MapLoad.map();
         Texture2D car;
         Texture2D background;
         Vector2 carPosition;
@@ -22,7 +31,20 @@ namespace RallyXtreme
 
         public Game1()
         {
-            
+
+
+
+            if (mapDirectory == "debug")
+            {
+                gameMap = MapLoad.debugLoad(true);
+                // loads a hardloaded map
+                // bool input designates whether the game will run normally
+                // or as debug mode with no victory/end state
+            }
+            else
+            {
+                gameMap = MapLoad.loadMap(mapDirectory);
+            }
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = 1600;
             graphics.PreferredBackBufferHeight = 900;
@@ -47,7 +69,10 @@ namespace RallyXtreme
                 graphics.PreferredBackBufferHeight / 2);
             carSpeed = 250f;
             carRotation = 0f;
-            
+            if (MapLoad.checkMap(gameMap) == false)
+            {
+                // add function to crash program here
+            }
             base.Initialize();
         }
 

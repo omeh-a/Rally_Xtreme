@@ -42,12 +42,17 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CacheLoad.cs" />
     <Compile Include="carValues.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>carValues.resx</DependentUpon>
     </Compile>
+    <Compile Include="Const.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="grid.cs" />
+    <Compile Include="MapLoad.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
