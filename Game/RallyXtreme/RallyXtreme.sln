@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RallyXtreme", "RallyXtreme\RallyXtreme.csproj", "{EA328EBD-0076-4EC1-BEF0-28579AF6BEC1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RallyXtreme_launcher", "..\..\Launcher\RallyXtreme_launcher\RallyXtreme_launcher\RallyXtreme_launcher.csproj", "{882E6314-917B-4BB1-80CB-C3D79468724A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{EA328EBD-0076-4EC1-BEF0-28579AF6BEC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA328EBD-0076-4EC1-BEF0-28579AF6BEC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA328EBD-0076-4EC1-BEF0-28579AF6BEC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{882E6314-917B-4BB1-80CB-C3D79468724A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{882E6314-917B-4BB1-80CB-C3D79468724A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{882E6314-917B-4BB1-80CB-C3D79468724A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{882E6314-917B-4BB1-80CB-C3D79468724A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

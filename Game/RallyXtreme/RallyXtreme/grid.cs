@@ -16,7 +16,7 @@ namespace RallyXtreme
         {
             bool state = true;
             // stub function
-            return state
+            return state;
         }
     }
 }

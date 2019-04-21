@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Diagnostics;
 
 namespace RallyXtreme
 {
@@ -14,11 +15,13 @@ namespace RallyXtreme
 
     public class Game1 : Game
     {
+        
+        public const int north = 0, east = 1, west = 2, south = 3;
         public string mapDirectory = CacheLoad.getMap();
         public string playerDirectory = CacheLoad.getPlayer();
         public string aiDirectory = CacheLoad.getAi();
         public int difficulty = CacheLoad.getDifficulty();
-        MapLoad.map gameMap = new MapLoad.map();
+        public static MapLoad.map gameMap = new MapLoad.map();
         Texture2D car;
         Texture2D background;
         Vector2 carPosition;
@@ -63,7 +66,11 @@ namespace RallyXtreme
             // TODO: Add your initialization logic here.
             // Called after the constructor, used for calling
             // non-graphical stuff.
-            
+
+            // This assert check crashes the program if the cache is not found
+            Debug.Assert(CacheLoad.cacheCheck() == true);
+
+            Player p1 = new Player();
             carPosition = new
                 Vector2(graphics.PreferredBackBufferWidth / 2,
                 graphics.PreferredBackBufferHeight / 2);
@@ -115,6 +122,9 @@ namespace RallyXtreme
                 Exit();
             var kstate = Keyboard.GetState();
 
+
+
+            // placeholder movement
             if (kstate.IsKeyDown(Keys.W) || kstate.IsKeyDown(Keys.Up))
             {
                 carPosition.Y -= carSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
