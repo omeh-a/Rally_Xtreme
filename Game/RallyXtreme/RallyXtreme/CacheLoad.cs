@@ -24,7 +24,7 @@ namespace RallyXtreme
          */
         public static bool cacheCheck()
         {
-            bool cacheValid = true;
+            bool cacheValid = true; 
             string folder = /*"C:\\Users\\matth\\Documents\\GitHub\\Rally_Xtreme\\Game\\RallyXtreme\\RallyXtreme\\cache";*/ 
                 Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + @"\cache\";
             string filter = "*.rxtcache";
