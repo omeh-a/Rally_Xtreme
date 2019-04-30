@@ -43,6 +43,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CacheLoad.cs" />
+    <Compile Include="carValues.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>carValues.resx</DependentUpon>
+    </Compile>
     <Compile Include="Const.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="grid.cs" />
@@ -59,6 +64,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="carValues.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>carValues.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Icon.ico" />
     <EmbeddedResource Include="Icon.bmp" />
   </ItemGroup>
