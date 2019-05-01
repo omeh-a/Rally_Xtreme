@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace RallyXtreme
 {
-    
+
 
     public static class CacheLoad
     {
@@ -25,46 +25,33 @@ namespace RallyXtreme
         public static bool cacheCheck()
         {
             bool cacheValid = true;
-            string folder = /*"C:\\Users\\matth\\Documents\\GitHub\\Rally_Xtreme\\Game\\RallyXtreme\\RallyXtreme\\cache";*/ 
-                Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + @"\cache\";
-            string filter = "*.rxtcache";
-            System.Console.WriteLine($"Process file at {folder}");
-            string[] files = Directory.GetFiles(folder, filter);
-            System.Console.WriteLine($"Found {files}");
-
-            if (files[0] == null)
-            {
-                cacheValid = false;
-            }
-            
-<<<<<<< HEAD
-            bool cacheValid = true;
             Debug.Assert(File.Exists(getLocation()) == true);
-=======
->>>>>>> parent of 54a845a... Finished cacheLoad class
             return cacheValid;
         }
         public static string getMap()
         {
+            // #1
             Debug.Assert(CacheLoad.cacheCheck() == true);
-            string directory = "debug";
-            // stub
+            string directory = get(1);
+            System.Console.WriteLine($"#CACHEREAD# found map as {directory}");
             return directory;
         }
 
         public static string getPlayer()
         {
+            // #2
             Debug.Assert(CacheLoad.cacheCheck() == true);
-            string directory = "debug";
-            // stub
+            string directory = get(2);
+            System.Console.WriteLine($"#CACHEREAD# found player as {directory}");
             return directory;
         }
 
         public static string getAi()
         {
+            // #3
             Debug.Assert(CacheLoad.cacheCheck() == true);
-            string directory = "debug";
-            // stub
+            string directory = get(3);
+            System.Console.WriteLine($"#CACHEREAD# found AI as {directory}");
             return directory;
         }
 
@@ -74,6 +61,81 @@ namespace RallyXtreme
             int difficulty = 0;
             // stub
             return difficulty;
+        }
+
+        private static string get(int type)
+        {
+            string result = "";
+            string directory = getLocation();
+            Console.WriteLine($"#CACHEREAD# Attempting to read cache from {directory}");
+
+
+            string line;
+            int i = 0;
+
+
+            // finding data for appointments
+            try
+            {
+                using (StreamReader r = new StreamReader(directory))
+                {
+                    while ((line = r.ReadLine()) != null)
+                    {
+                        // Console.Write("#CACHEREAD# " + line + '\n');
+                        i++;
+                        if (i == 1 && type == 1)
+                        {
+                            result = line;
+                        }
+                        if (i == 2 && type == 2)
+                        {
+                            result = line;
+                        }
+                        if (i == 3 && type == 3)
+                        {
+                            result = line;
+                        }
+                        if (i == 4 && type == 4)
+                        {
+                            result = line;
+                        }
+                    }
+                }
+            }
+
+            // Shows an error message if something happens
+            catch (Exception er)
+            {
+                System.Console.WriteLine($"### CACHE READ EXCEPTION -> {er}");
+            }
+
+
+
+            return result;
+        }
+
+        private static string getLocation()
+        {
+            string location;
+            string folder = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+            string filter = "*.rxtcache";
+            //System.Console.WriteLine($"#CACHEREAD# Process file at {folder}");
+            string[] files = new string[100];
+            files[0] = "NONE";
+            files = Directory.GetFiles(folder, filter);
+            //System.Console.WriteLine($"#CACHEREAD# Found {Directory.GetFiles(folder, filter)[0]}");
+            if (files[0] == "NONE")
+            {
+                location = "";
+                System.Console.WriteLine("#CACHEREAD $CACHE NOT FOUND&");
+            }
+            else
+            {
+                location = files[0];
+            }
+            Debug.Assert(location != "");
+            //System.Console.WriteLine($"#CACHEREAD# Found {location}");
+            return location;
         }
 
     }

@@ -36,7 +36,7 @@ namespace RallyXtreme
             // loads a hardcoded version of env_1314
             map foundMap = new map();
             // loadstate is included for testing sake
-
+            
             // stub function
 
             return foundMap;
