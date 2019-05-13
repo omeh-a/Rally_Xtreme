@@ -7,6 +7,16 @@ using System.IO;
 
 namespace RallyXtreme
 {
+
+
+    // DEFUNCT !
+
+
+
+
+        /// <summary>
+        /// DEFUNCT
+        /// </summary>
     public static class MapLoad
     {
         public struct map

@@ -8,8 +8,7 @@ namespace RallyXtreme
 {
     class Player
     {
-        public int xPos = Game1.gameMap.xSize / 2;
-        public int yPos = Game1.gameMap.ySize / 2;
+        
         public bool updatePosition(int direction)
         {
             bool posState = false;

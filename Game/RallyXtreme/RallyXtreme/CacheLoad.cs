@@ -74,7 +74,7 @@ namespace RallyXtreme
             int i = 0;
 
 
-            // finding data for appointments
+            // finding data
             try
             {
                 using (StreamReader r = new StreamReader(directory))

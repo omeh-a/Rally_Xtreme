@@ -21,7 +21,8 @@ namespace RallyXtreme
         public string playerDirectory = CacheLoad.getPlayer();
         public string aiDirectory = CacheLoad.getAi();
         public int difficulty = CacheLoad.getDifficulty();
-        public static MapLoad.map gameMap = new MapLoad.map();
+        // public static MapLoad.map gameMap = new MapLoad.map();
+        public gamegrid mainGrid = grid.generateGrid(CacheLoad.getMap());
         Texture2D car;
         Texture2D background;
         Vector2 carPosition;
@@ -39,14 +40,14 @@ namespace RallyXtreme
 
             if (mapDirectory == "debug")
             {
-                gameMap = MapLoad.debugLoad(true);
+                //gameMap = MapLoad.debugLoad(true);
                 // loads a hardloaded map
                 // bool input designates whether the game will run normally
                 // or as debug mode with no victory/end state
             }
             else
             {
-                gameMap = MapLoad.loadMap(mapDirectory);
+                //gameMap = MapLoad.loadMap(mapDirectory);
             }
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = 1600;
@@ -76,10 +77,10 @@ namespace RallyXtreme
                 graphics.PreferredBackBufferHeight / 2);
             carSpeed = 250f;
             carRotation = 0f;
-            if (MapLoad.checkMap(gameMap) == false)
+            /*if (MapLoad.checkMap(gameMap) == false)
             {
                 // add function to crash program here
-            }
+            }*/
             base.Initialize();
         }
 
