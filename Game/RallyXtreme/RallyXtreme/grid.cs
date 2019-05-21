@@ -10,7 +10,7 @@ namespace RallyXtreme
 {
     public struct gamegrid
     {
-        public int[,] collisions;
+        public char[,] collisions;
         public int[,] turnData;
         public int xSize;
         public int ySize;
@@ -100,15 +100,75 @@ namespace RallyXtreme
                 System.Console.WriteLine($"### GRID READ EXCEPTION -> {er}");
             }
 
+            // The following loop attempts to convert the retrieved strings into ints
+            i = 0;
+            while (i < 3)
+            {
+                try
+                {
+                    if (i == 1)
+                        newGrid.xSize = Int32.Parse(xSizeString);
+                    else if (i == 2)
+                        newGrid.ySize = Int32.Parse(ySizeString);
+                    else if (i == 3)
+                        newGrid.pixelSize= Int32.Parse(pixelString);
+                }
+                catch (FormatException)
+                {
+                    if (i == 1)
+                        Console.WriteLine($"Unable to parse '{xSizeString}'");
+                    else if (i == 2)
+                        Console.WriteLine($"Unable to parse '{ySizeString}'");
+                    else if (i == 3)
+                        Console.WriteLine($"Unable to parse '{pixelString}'");
+                }
+                i++;
+            }
+            
+            System.Console.WriteLine($"#GRID# Mapdata read complete, beginning hitbox read from {directory}/hitbox.rxhb");
+            // ############################################################
+            // Reading from hitbox
+            // ############################################################
+
+
+            // note: xSize and ySize do not include the boundary area around the outside
+            //       of the grid and the collisions map only includes horizontal borders.
+            newGrid.collisions = new char[newGrid.xSize, newGrid.ySize];
+
+            /* 
+             * Inside of the hitbox file, symbols mean as follows:
+             * $ = horizontal border, use this on the extreme right
+             *     of each row
+             * # = free space
+             * 0 = wall
+             */
+
+            int l = 0;
+            int e = 0;
             try
             {
-                newGrid.collisions[0,0] = Int32.Parse(xSizeString);
-            } catch (FormatException)
+                using (StreamReader r = new StreamReader(directory + "/hitbox.rxhb"))
+                {
+                    while ((line = r.ReadLine()) != null)
+                    {
+                        // Console.Write("#CACHEREAD# " + line + '\n');
+                        while (i < newGrid.xSize)
+                        {
+                            newGrid.collisions[i, l] = line[i];
+                            i++;
+                        }
+                        i = 0;
+                        l++;                        
+                    }
+                }
+            }
+            // Shows an error message if something happens
+            catch (Exception er)
             {
-                Console.WriteLine($"Unable to parse '{xSizeString}'");
+                System.Console.WriteLine($"### GRID READ EXCEPTION -> {er}");
             }
 
-
+         
 
 
             return newGrid;
@@ -155,6 +215,26 @@ namespace RallyXtreme
              * 4 = A square forming a 4 way intersection. A turn may be made in
              *     any direction so no additional data is required.
              */
+        }
+
+        public static void debugWriteGridCollisionWrite(gamegrid toTest)
+        {
+            string line = string.Empty;
+
+            int i = 0;
+            int e = 0;
+
+
+            while (i < toTest.ySize)
+            {
+                while (e < toTest.xSize)
+                {
+                    var str = new string(toTest.collisions[i])
+                }
+
+
+            }
+
         }
     }
 }
