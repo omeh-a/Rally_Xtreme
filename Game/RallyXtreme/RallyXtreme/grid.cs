@@ -10,7 +10,7 @@ namespace RallyXtreme
 {
     public struct gamegrid
     {
-        public char[,] collisions;
+        public char[][] collisions;
         public int[,] turnData;
         public int xSize;
         public int ySize;
@@ -133,7 +133,7 @@ namespace RallyXtreme
 
             // note: xSize and ySize do not include the boundary area around the outside
             //       of the grid and the collisions map only includes horizontal borders.
-            newGrid.collisions = new char[newGrid.xSize, newGrid.ySize];
+            newGrid.collisions = new char[newGrid.xSize][];
 
             /* 
              * Inside of the hitbox file, symbols mean as follows:
@@ -142,9 +142,7 @@ namespace RallyXtreme
              * # = free space
              * 0 = wall
              */
-
-            int l = 0;
-            int e = 0;
+            i = 0;
             try
             {
                 using (StreamReader r = new StreamReader(directory + "/hitbox.rxhb"))
@@ -152,13 +150,9 @@ namespace RallyXtreme
                     while ((line = r.ReadLine()) != null)
                     {
                         // Console.Write("#CACHEREAD# " + line + '\n');
-                        while (i < newGrid.xSize)
-                        {
-                            newGrid.collisions[i, l] = line[i];
-                            i++;
-                        }
-                        i = 0;
-                        l++;                        
+
+                        newGrid.collisions[i] = line.ToCharArray();
+                        i++;
                     }
                 }
             }
@@ -168,12 +162,12 @@ namespace RallyXtreme
                 System.Console.WriteLine($"### GRID READ EXCEPTION -> {er}");
             }
 
-         
+            debugWriteGridCollisionWrite(newGrid);
 
 
             return newGrid;
         }
-        public static void populateGrid(int[,] grid)
+        public static void populateGrid(int[][] grid)
         {
             /* This function takes in the generated grid and generates a
              * complimentary grid of turn information.
@@ -215,6 +209,11 @@ namespace RallyXtreme
              * 4 = A square forming a 4 way intersection. A turn may be made in
              *     any direction so no additional data is required.
              */
+
+
+
+
+
         }
 
         public static void debugWriteGridCollisionWrite(gamegrid toTest)
@@ -222,17 +221,13 @@ namespace RallyXtreme
             string line = string.Empty;
 
             int i = 0;
-            int e = 0;
 
-
-            while (i < toTest.ySize)
+            System.Console.WriteLine("HITBOX");
+            while (i < toTest.xSize)
             {
-                while (e < toTest.xSize)
-                {
-                    var str = new string(toTest.collisions[i])
-                }
+                System.Console.WriteLine(toTest.collisions[i]);
 
-
+                i++;
             }
 
         }
