@@ -7,7 +7,7 @@ using System.IO;
 
 namespace RallyXtreme
 {
-    public struct playerChar
+    public struct enemyChar
     {
         public string name;
         public int speed;
@@ -16,37 +16,23 @@ namespace RallyXtreme
         public string modelDirectory;
     }
 
-    class Player
+    class AI
     {
         
-        public bool updatePosition(int direction)
-        {
-            bool posState = false;
-            if (direction == Const.north || direction == Const.south || 
-                direction == Const.east || direction == Const.west)
-            {
-                posState = true;
-            }
-            
 
 
-            return posState;
-        }
-        
-
-
-        public static playerChar createPlayer(string playerDirectory)
+        public static enemyChar createEnemy(string enemyDirectory)
         {
             /* This function takes in a directory from the cache read and then
              * attempts to retrieve variables from its datafile in preparation
              * for use by other functions
              */
 
-            playerChar newPlayer = new playerChar();
-            string directory = playerDirectory;
-            // note that playerDirectory is called from Game1.cs
+            enemyChar newEnemy = new enemyChar();
+            string directory = enemyDirectory;
+            // note that enemyDirectory is called from Game1.cs
 
-            Console.WriteLine($"#PLAYER# Preparing to generate from {directory}...");
+            Console.WriteLine($"#ENEMY# Preparing to generate from {directory}...");
 
 
             string line;
@@ -63,7 +49,7 @@ namespace RallyXtreme
             // these variables must be parsed to ints, as you can only read
             // strings or chars from a text file.
 
-            Console.WriteLine("#PLAYER# attempting to read charinfo.rtxci");
+            Console.WriteLine("#ENEMY# attempting to read charinfo.rtxci");
             try
             {
                 using (StreamReader r = new StreamReader(directory + "/charinfo.rtxci"))
@@ -75,7 +61,7 @@ namespace RallyXtreme
                             i++;
                             if (i == 1)
                             {
-                                newPlayer.name = line;
+                                newEnemy.name = line;
                             }
                             if (i == 2)
                             {
@@ -91,14 +77,14 @@ namespace RallyXtreme
                             }
                             // System.Console.WriteLine(line);
                         }
-                        
+
                     }
                 }
             }
             // Shows an error message if something happens
             catch (Exception er)
             {
-                System.Console.WriteLine($"### PLAYER READ EXCEPTION -> {er}");
+                System.Console.WriteLine($"### ENEMY READ EXCEPTION -> {er}");
             }
 
             // The following loop attempts to convert the retrieved strings into ints
@@ -108,11 +94,11 @@ namespace RallyXtreme
                 try
                 {
                     if (i == 1)
-                        newPlayer.speed = Int32.Parse(speedValue);
+                        newEnemy.speed = Int32.Parse(speedValue);
                     else if (i == 2)
-                        newPlayer.pixelXY = Int32.Parse(xySize);
+                        newEnemy.pixelXY = Int32.Parse(xySize);
                     else if (i == 3)
-                        newPlayer.ability = Int32.Parse(ability);
+                        newEnemy.ability = Int32.Parse(ability);
                 }
                 catch (FormatException)
                 {
@@ -126,11 +112,11 @@ namespace RallyXtreme
                 i++;
             }
 
-            newPlayer.modelDirectory = $"{directory}";
+            newEnemy.modelDirectory = $"{directory}";
 
-            System.Console.WriteLine($"#PLAYER# Read complete");
-           
-            return newPlayer;
+            System.Console.WriteLine($"#ENEMY# Read complete");
+
+            return newEnemy;
         }
     }
 }

@@ -42,6 +42,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AI.cs" />
     <Compile Include="CacheLoad.cs" />
     <Compile Include="carValues.Designer.cs">
       <AutoGen>True</AutoGen>

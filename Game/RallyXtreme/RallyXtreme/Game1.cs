@@ -23,6 +23,8 @@ namespace RallyXtreme
         public int difficulty = CacheLoad.getDifficulty();
         // public static MapLoad.map gameMap = new MapLoad.map();
         public gamegrid mainGrid = grid.generateGrid(CacheLoad.getMap());
+        public playerChar player0 = Player.createPlayer(CacheLoad.getPlayer());
+        public enemyChar enemy0 = AI.createEnemy(CacheLoad.getAi());
         Texture2D car;
         Texture2D background;
         Vector2 carPosition;
