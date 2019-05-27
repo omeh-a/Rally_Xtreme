@@ -20,10 +20,10 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="1">
-                <Button x:Name="ControlsButton" Content="Controls and configuration" Margin="50,375,50,150"/>
-                <Button x:Name="LevelSelectButton" Content="Custom content loader" Margin="50,425,50,100"/>
+                <Button x:Name="ControlsButton" Content="Controls" Margin="50,375,50,150" Click="ControlsButton_Click"/>
+                <Button x:Name="LevelSelectButton" Content="Open content directory&#xD;&#xA;(for installing new content!)" Margin="50,425,50,100"/>
                 <Button x:Name="StartButton" Content="Launch Rally-Xtreme" Margin="50,475,50,50" Background="Orange" FontFamily="Arial" FontWeight="Black" Click="StartButton_Click"/>
-                <Button x:Name="AIMenu" Content="Ai Settings" Margin="50,325,50,200" FontFamily="Arial" Click="AIMenu_Click"/>
+                <Button x:Name="AIMenu" Content="Video" Margin="50,325,50,200" FontFamily="Arial" Click="AIMenu_Click"/>
             </Grid>
 
         </Grid>

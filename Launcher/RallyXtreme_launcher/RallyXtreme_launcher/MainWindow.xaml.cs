@@ -15,12 +15,24 @@ using System.Windows.Shapes;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Diagnostics;
 
 namespace RallyXtreme_launcher
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    /// 
+    public struct prefs
+    {
+        public string mapDirectory;
+        public string playerDirectory;
+        public string aiDirectory;
+        public int difficulty;
+    }
+
+
+
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -41,31 +53,33 @@ namespace RallyXtreme_launcher
 
             }
 
-        public void mapCacheWrite()
+        public bool mapCacheWrite()
         {
-            // test XML writer, relocate to map selection window
-            Map test= new Map();
-            test.name = "thirteenfourteen";
-            test.imgPath = "c:/Windows/Users/matth/rallyx";
-            test.gridX = 13;
-            test.gridY = 14;
-            test.hitboxPath = null;
-            test.enemyNumber = 2;
-            test.difficulty = 1;
+            bool success = true;
 
-            XmlSerializer writer = new XmlSerializer(typeof(Map));
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//SerializationOverview.xml";
-            System.IO.FileStream file = System.IO.File.Create(path);
-            writer.Serialize(file, test);
-            file.Close();
+
+
+            return success;
         }
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            mapCacheWrite();
+            
+                Process newGame = new Process();
+                newGame.StartInfo.FileName = "C:\\Users\\matth\\Documents\\GitHub\\Rally_Xtreme\\Game\\RallyXtreme\\RallyXtreme\\bin\\DesktopGL\\AnyCPU\\Debug\\rallyxtreme.exe";
+                newGame.EnableRaisingEvents = true;
+                newGame.Start();    
+            
+
+
         }
 
         private void AIMenu_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ControlsButton_Click(object sender, RoutedEventArgs e)
         {
 
         }
