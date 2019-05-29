@@ -38,7 +38,6 @@ namespace RallyXtreme_launcher
         public MainWindow()
         {
             InitializeComponent();
-            
         }
 
         public class Map
@@ -56,7 +55,18 @@ namespace RallyXtreme_launcher
         public bool mapCacheWrite()
         {
             bool success = true;
+            string directory = System.IO.Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+            try
+            {
+                using (StreamWriter w = new StreamWriter(directory))
+                {
 
+                }
+            }
+            catch (Exception er)
+            {
+                Console.WriteLine($"#cachewrite# {er}");
+            }
 
 
             return success;
@@ -64,13 +74,12 @@ namespace RallyXtreme_launcher
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            
-                Process newGame = new Process();
-                newGame.StartInfo.FileName = "C:\\Users\\matth\\Documents\\GitHub\\Rally_Xtreme\\Game\\RallyXtreme\\RallyXtreme\\bin\\DesktopGL\\AnyCPU\\Debug\\rallyxtreme.exe";
-                newGame.EnableRaisingEvents = true;
-                newGame.Start();    
-            
-
+                
+            Process newGame = new Process();
+            newGame.StartInfo.FileName = getDirectory.getExecutable();
+            newGame.EnableRaisingEvents = true;
+            newGame.Start();
+            Close();
 
         }
 

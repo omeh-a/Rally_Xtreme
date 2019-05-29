@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace RallyXtreme_launcher
 {
     /// <summary>
-    /// Interaction logic for Page1.xaml
+    /// Interaction logic for ControlsMenu.xaml
     /// </summary>
-    public partial class Page1 : Page
+    public partial class ControlsMenu : Page
     {
-        public Page1()
+        public ControlsMenu()
         {
             InitializeComponent();
         }
