@@ -57,10 +57,53 @@ namespace RallyXtreme
 
         public static int getDifficulty()
         {
+            // #4
             Debug.Assert(CacheLoad.cacheCheck() == true);
             int difficulty = 0;
             // stub
             return difficulty;
+        }
+
+        public static int getResolutionX()
+        {
+            // 5
+            Debug.Assert(CacheLoad.cacheCheck() == true);
+            string resolutionString = get(5);
+            int resolution = 0;
+            // The following loop attempts to convert the retrieved strings into 
+            try
+            {
+                resolution = Int32.Parse(resolutionString);
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine($"Unable to parse '{resolutionString}' for resolutionX");
+            }
+                
+            
+            System.Console.WriteLine($"#CACHEREAD# found xRes as {resolution}");
+            return resolution;
+        }
+
+        public static int getResolutionY()
+        {
+            // 6
+            Debug.Assert(CacheLoad.cacheCheck() == true);
+            string resolutionString = get(6);
+            int resolution = 0;
+            // The following loop attempts to convert the retrieved strings into 
+            try
+            {
+                resolution = Int32.Parse(resolutionString);
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine($"Unable to parse '{resolutionString}' for resolutionX");
+            }
+
+
+            System.Console.WriteLine($"#CACHEREAD# found yRes as {resolution}");
+            return resolution;
         }
 
         private static string get(int type)
@@ -96,6 +139,14 @@ namespace RallyXtreme
                             result = line;
                         }
                         if (i == 4 && type == 4)
+                        {
+                            result = line;
+                        }
+                        if (i == 5 && type == 5)
+                        {
+                            result = line;
+                        }
+                        if (i == 6 && type == 6)
                         {
                             result = line;
                         }

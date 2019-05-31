@@ -68,7 +68,9 @@ namespace RallyXtreme
         {
             // TODO: Add your initialization logic here.
             // Called after the constructor, used for calling
-            // non-graphical stuff.
+            // non-graphical stuff.v5\
+           
+           
 
             // This assert check crashes the program if the cache is not found
             Debug.Assert(CacheLoad.cacheCheck() == true);

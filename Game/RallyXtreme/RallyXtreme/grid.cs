@@ -11,10 +11,14 @@ namespace RallyXtreme
     public struct gamegrid
     {
         public char[][] collisions;
+        public char[][] entities;
         public int[,] turnData;
         public int xSize;
         public int ySize;
         public int pixelSize;
+        public string name;
+        public int[] playerStart;
+        public int[][] enemystart;
     }
 
 
@@ -69,7 +73,7 @@ namespace RallyXtreme
             string pixelString = "";
             // these variables must be parsed to ints, as you can only read
             // strings or chars from a text file.
-
+            
             Console.WriteLine("#GRID# attempting to read mapdata.rxtm");
             try
             {
@@ -90,7 +94,13 @@ namespace RallyXtreme
                         if (i == 3)
                         {
                             pixelString = line;
+                            System.Console.WriteLine($"#GRID# Pixel size = {line}");
                         }
+                        if (i == 4)
+                        {
+                            newGrid.name = line;
+                        }
+                        
                     }
                 }
             }
@@ -102,7 +112,7 @@ namespace RallyXtreme
 
             // The following loop attempts to convert the retrieved strings into ints
             i = 0;
-            while (i < 3)
+            while (i <= 3)
             {
                 try
                 {
@@ -111,7 +121,12 @@ namespace RallyXtreme
                     else if (i == 2)
                         newGrid.ySize = Int32.Parse(ySizeString);
                     else if (i == 3)
-                        newGrid.pixelSize= Int32.Parse(pixelString);
+                    {
+                        newGrid.pixelSize = Int32.Parse(pixelString);
+                        System.Console.WriteLine($"#GRID# Parsed {pixelString} -> {newGrid.pixelSize}");
+                    }
+                    
+
                 }
                 catch (FormatException)
                 {
@@ -137,22 +152,49 @@ namespace RallyXtreme
 
             /* 
              * Inside of the hitbox file, symbols mean as follows:
-             * $ = horizontal border, use this on the extreme right
-             *     of each row
+             * $ = border of map
              * # = free space
              * 0 = wall
+             * s = player spawn (also free space)
+             * e = enemy spawn (also free space)
              */
             i = 0;
+            int o = 0;
+            int e = 0;
             try
             {
                 using (StreamReader r = new StreamReader(directory + "/hitbox.rxhb"))
                 {
                     while ((line = r.ReadLine()) != null)
                     {
-                        // Console.Write("#CACHEREAD# " + line + '\n');
+                        /* The below lines look for an player/enemy start position and
+                         * store them in int arrays.
+                         */
+                        while (o < line.Length)
+                        {
+                            if (line[o] == 's')
+                            {
+                                newGrid.playerStart = new int[2];
+                                newGrid.playerStart[0] = o;
+                                newGrid.playerStart[1] = i;
+                                System.Console.WriteLine($"#GRID# player start @{o},{i}");
+                            }
+                            if (line[o] == 'e')
+                            {
+                                newGrid.enemystart = new int[10][];
+                                newGrid.enemystart[e] = new int[2];
+                                newGrid.enemystart[e][0] = o;
+                                newGrid.enemystart[e][1] = i;
+                                System.Console.WriteLine($"#GRID# enemy #{e} start @{o},{i}");
+                            }
+                            o++;
+                        }
+                        o = 0;
 
+                        // the below simply stores the hitbox
                         newGrid.collisions[i] = line.ToCharArray();
                         i++;
+
                     }
                 }
             }
@@ -163,7 +205,7 @@ namespace RallyXtreme
             }
 
             debugWriteGridCollisionWrite(newGrid);
-
+            newGrid.entities = newGrid.collisions;
 
             return newGrid;
         }

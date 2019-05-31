@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+
 
 namespace RallyXtreme
 {
@@ -14,25 +18,48 @@ namespace RallyXtreme
         public int pixelXY;
         public int ability;
         public string modelDirectory;
+        public Vector2 pos;
+        public ushort gridX;
+        public ushort gridY;
+        public ushort direction;
+        public bool alive;
+        public int lives;
     }
 
     class Player
     {
         
-        public bool updatePosition(int direction)
+        public static void updatePos(ushort direction, playerChar player)
         {
-            bool posState = false;
-            if (direction == Const.north || direction == Const.south || 
-                direction == Const.east || direction == Const.west)
-            {
-                posState = true;
-            }
             
-
-
-            return posState;
         }
-        
+
+        public static void kill(playerChar player)
+        {
+            //stub
+            Console.Out.WriteLine("#PLAYER# Player has been killed !");
+            player.alive = false;
+            player.lives = player.lives - 1;
+        }
+
+        public static void giveLife(playerChar player)
+
+
+
+        public double reportRotation(playerChar player)
+        {
+            // this function converts the integer direction into radians and returns it
+            double rtn = 0f;
+            if (player.direction == 0)
+                rtn = 0f;
+            else if (player.direction == 1)
+                rtn = Math.PI / 2f;
+            else if (player.direction == 2)
+                rtn = Math.PI;
+            else if (player.direction == 3)
+                rtn = Math.PI + (Math.PI / 2f);
+            return rtn;
+        }
 
 
         public static playerChar createPlayer(string playerDirectory)
@@ -53,6 +80,9 @@ namespace RallyXtreme
             int i = 0;
 
 
+            newPlayer.lives = 3;
+            newPlayer.alive = true;
+            newPlayer.direction = 0;
 
             // ############################################################
             // Reading from mapdata
