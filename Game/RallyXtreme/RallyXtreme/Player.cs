@@ -19,19 +19,59 @@ namespace RallyXtreme
         public int ability;
         public string modelDirectory;
         public Vector2 pos;
-        public ushort gridX;
-        public ushort gridY;
+        public int gridX;
+        public int gridY;
         public ushort direction;
         public bool alive;
         public int lives;
+        public int gridPixelSize;
     }
 
     class Player
     {
         
-        public static void updatePos(ushort direction, playerChar player)
+        public static playerChar updatePos(ushort desiredDirection, playerChar player)
         {
-            
+
+
+            player = stepFoward(desiredDirection, player);
+
+            return player;
+        }
+
+        public static playerChar stepFoward(ushort direction, playerChar player)
+        {
+
+            if (direction == 1 && player.gridX < 14)
+            {
+                player.gridX += 1;
+                player.direction = 1;
+            }
+
+            if (direction == 3 && player.gridX > 1)
+            {
+                player.gridX -= 1;
+                player.direction = 3;
+            }
+
+            if (direction == 0 && player.gridY > 1)
+            {
+                player.gridY -= 1;
+                player.direction = 0;
+            }
+
+            if (direction == 2 && player.gridY < 13)
+            {
+                player.gridY += 1;
+                player.direction = 2;
+            }
+
+
+
+            player.pos = new Vector2(((player.gridX * player.gridPixelSize) + player.gridPixelSize / 2),
+                ((player.gridY * player.gridPixelSize)) + player.gridPixelSize / 2);
+
+            return player;
         }
 
         public static void kill(playerChar player)
@@ -43,26 +83,30 @@ namespace RallyXtreme
         }
 
         public static void giveLife(playerChar player)
+        {
+            player.lives += 1;
+            Console.Out.WriteLine($"#PLAYER# Life added -> total = {player.lives}");
+        }
 
 
 
-        public double reportRotation(playerChar player)
+        public static float reportRotation(playerChar player)
         {
             // this function converts the integer direction into radians and returns it
-            double rtn = 0f;
+            float rtn = 0f;
             if (player.direction == 0)
                 rtn = 0f;
             else if (player.direction == 1)
-                rtn = Math.PI / 2f;
+                rtn = (float) Math.PI / 2f;
             else if (player.direction == 2)
-                rtn = Math.PI;
+                rtn = (float)Math.PI;
             else if (player.direction == 3)
-                rtn = Math.PI + (Math.PI / 2f);
+                rtn = (float) Math.PI + ((float) Math.PI / 2f);
             return rtn;
         }
 
 
-        public static playerChar createPlayer(string playerDirectory)
+        public static playerChar createPlayer(string playerDirectory, gamegrid grid)
         {
             /* This function takes in a directory from the cache read and then
              * attempts to retrieve variables from its datafile in preparation
@@ -83,6 +127,11 @@ namespace RallyXtreme
             newPlayer.lives = 3;
             newPlayer.alive = true;
             newPlayer.direction = 0;
+            newPlayer.gridPixelSize = grid.pixelSize;
+
+            
+            newPlayer.gridX = grid.playerStart[0];
+            newPlayer.gridY = grid.playerStart[1];
 
             // ############################################################
             // Reading from mapdata

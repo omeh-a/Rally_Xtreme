@@ -23,7 +23,7 @@ namespace RallyXtreme
         public int difficulty = CacheLoad.getDifficulty();
         // public static MapLoad.map gameMap = new MapLoad.map();
         public gamegrid mainGrid = grid.generateGrid(CacheLoad.getMap());
-        public playerChar player0 = Player.createPlayer(CacheLoad.getPlayer());
+        public playerChar player0 = new playerChar();
         public enemyChar enemy0 = AI.createEnemy(CacheLoad.getAi());
         Texture2D car;
         Texture2D background;
@@ -34,6 +34,10 @@ namespace RallyXtreme
         int score = 0;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        int tickCount = 0;
+        public int tickLimit = 10000000;
+        double accumulator = 0f;
+        ushort nextDirection = 4;
 
         public Game1()
         {
@@ -52,8 +56,8 @@ namespace RallyXtreme
                 //gameMap = MapLoad.loadMap(mapDirectory);
             }
             graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferWidth = 1600;
-            graphics.PreferredBackBufferHeight = 900;
+            graphics.PreferredBackBufferWidth = CacheLoad.getResolutionX();
+            graphics.PreferredBackBufferHeight = CacheLoad.getResolutionY();
 
             Content.RootDirectory = "Content";
         }
@@ -69,18 +73,16 @@ namespace RallyXtreme
             // TODO: Add your initialization logic here.
             // Called after the constructor, used for calling
             // non-graphical stuff.v5\
-           
-           
 
+
+            player0 = Player.createPlayer(CacheLoad.getPlayer(), mainGrid);
             // This assert check crashes the program if the cache is not found
             Debug.Assert(CacheLoad.cacheCheck() == true);
 
-            Player p1 = new Player();
-            carPosition = new
-                Vector2(graphics.PreferredBackBufferWidth / 2,
-                graphics.PreferredBackBufferHeight / 2);
+            carPosition = player0.pos;
             carSpeed = 250f;
             carRotation = 0f;
+
             /*if (MapLoad.checkMap(gameMap) == false)
             {
                 // add function to crash program here
@@ -123,46 +125,55 @@ namespace RallyXtreme
         {
             // gameTime.ElapsedGameTime.Totalseconds is used here to ensure consistent timings between activations because each update
             // frame is not neccesarily the same length.
+            
+            
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             var kstate = Keyboard.GetState();
 
 
 
-            // placeholder movement
             if (kstate.IsKeyDown(Keys.W) || kstate.IsKeyDown(Keys.Up))
             {
-                carPosition.Y -= carSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                carRotation = 0f;
+                nextDirection = 0;
             }
             if (kstate.IsKeyDown(Keys.S) || kstate.IsKeyDown(Keys.Down))
             {
-                carPosition.Y += carSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                carRotation = (float)Math.PI;
+                nextDirection = 2;
             }
             if (kstate.IsKeyDown(Keys.A) || kstate.IsKeyDown(Keys.Left))
             {
-                carPosition.X -= carSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                carRotation = (float)Math.PI + 1.57079632679f;
+                nextDirection = 3;
             }
-
             if (kstate.IsKeyDown(Keys.D) || kstate.IsKeyDown(Keys.Right))
             {
-                carPosition.X += carSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                carRotation = 1.57079632679f;
+                nextDirection = 1;
             }
 
+            if ((accumulator) > 0.3)
+            {
+                player0 = Player.updatePos(nextDirection, player0);
+                score++;
+                tickCount = 0;
+                Console.WriteLine($"#GAME# Movement tick");
+                accumulator = 0;
+            }
+            carRotation = Player.reportRotation(player0);
+            carPosition = player0.pos;
+
             // This code makes sure that the car cannot leave the screen by comparing the location of the car to the size of the screen
-            carPosition.X = Math.Min(Math.Max(car.Width/2, carPosition.X), graphics.PreferredBackBufferWidth - car.Width/2);
-            carPosition.Y = Math.Min(Math.Max(car.Height/2, carPosition.Y), graphics.PreferredBackBufferHeight - car.Height/2);
+            //carPosition.X = Math.Min(Math.Max(car.Width/2, carPosition.X), graphics.PreferredBackBufferWidth - car.Width/2);
+            //carPosition.Y = Math.Min(Math.Max(car.Height/2, carPosition.Y), graphics.PreferredBackBufferHeight - car.Height/2);
 
             //    N
             //  # 0 # 
             //W 3 # 1 E
             //  # 2 #
             //    S
-            score++;
 
+            accumulator += (double) gameTime.ElapsedGameTime.TotalSeconds;
+            
             base.Update(gameTime);
             // TODO: Add your update logic here
             // Called every tick to update game state

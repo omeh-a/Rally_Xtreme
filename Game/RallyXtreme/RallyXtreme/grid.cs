@@ -25,6 +25,17 @@ namespace RallyXtreme
 
     class grid
     {
+        public static char returnEntities(int x, int y, gamegrid grid)
+        {
+            // This function returns the contents of the entity array
+            // if the grid refers to an empty space or a border tile
+            // a * will be returned instead.
+            char entity = grid.entities[x][y];
+            if (entity == '$' || entity == '#')
+                entity = '*';
+            return entity;
+        }
+
 
         public static gamegrid generateGrid(string mapDirectory)
         {

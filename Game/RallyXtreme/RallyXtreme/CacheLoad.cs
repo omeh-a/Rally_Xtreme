@@ -171,7 +171,7 @@ namespace RallyXtreme
 
 
             string location;
-            string folder = "C:\\Users\\matth\\Documents\\GitHub\\Rally_Xtreme\\Game\\RallyXtreme\\RallyXtreme\\bin\\DesktopGL\\AnyCPU\\Debug";/*Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);*/
+            string folder = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
             string filter = "*.rxtcache";
             //System.Console.WriteLine($"#CACHEREAD# Process file at {folder}");
             string[] files = new string[100];
@@ -194,3 +194,4 @@ namespace RallyXtreme
 
     }
 }
+// "C:\\Users\\matth\\Documents\\GitHub\\Rally_Xtreme\\Game\\RallyXtreme\\RallyXtreme\\bin\\DesktopGL\\AnyCPU\\Debug";
