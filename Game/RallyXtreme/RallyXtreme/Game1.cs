@@ -34,7 +34,6 @@ namespace RallyXtreme
         int score = 0;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        int tickCount = 0;
         public int tickLimit = 10000000;
         double accumulator = 0f;
         ushort nextDirection = 4;
@@ -153,10 +152,9 @@ namespace RallyXtreme
 
             if ((accumulator) > 0.3)
             {
-                player0 = Player.updatePos(nextDirection, player0);
+                player0 = Player.updatePos(nextDirection, player0, mainGrid);
                 score++;
-                tickCount = 0;
-                Console.WriteLine($"#GAME# Movement tick");
+                Console.WriteLine($"#GAME# Movement tick -> Player = ({player0.gridX},{player0.gridY})");
                 accumulator = 0;
             }
             carRotation = Player.reportRotation(player0);

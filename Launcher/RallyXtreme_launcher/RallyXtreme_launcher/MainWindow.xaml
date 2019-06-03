@@ -5,25 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RallyXtreme_launcher"
         mc:Ignorable="d"
-        Title="Rally-Xtreme Launcher" Height="600" Width="600" ResizeMode="NoResize">
+        Title="Rally-Xtreme Launcher" Height="1080" Width="1920" ResizeMode="CanMinimize">
 
     <Grid Background="orange">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="82*"/>
         </Grid.ColumnDefinitions>
-        <Image Margin="10,10,8.666,404" Source="logo.png" Stretch="Fill" Grid.ColumnSpan="2"/>
+        <Image Margin="472.667,70,524.667,696" Source="logo.png" Stretch="Fill" Grid.Column="1"/>
         <Grid Grid.ColumnSpan="2" Margin="0,0,-0.334,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="1">
-                <Button x:Name="ControlsButton" Content="Controls" Margin="50,375,50,150" Click="ControlsButton_Click"/>
-                <Button x:Name="LevelSelectButton" Content="Open content directory&#xD;&#xA;(for installing new content!)" Margin="50,425,50,100"/>
-                <Button x:Name="StartButton" Content="Launch Rally-Xtreme" Margin="50,475,50,50" Background="Orange" FontFamily="Arial" FontWeight="Black" Click="StartButton_Click"/>
-                <Button x:Name="AIMenu" Content="Video" Margin="50,325,50,200" FontFamily="Arial" Click="AIMenu_Click"/>
+                <Button x:Name="ControlsButton" Content="Controls" Margin="50,787,50,211" Click="ControlsButton_Click"/>
+                <Button x:Name="LevelSelectButton" Content="Open content directory&#xD;&#xA;(for installing new content!)" Margin="50,846,50,156"/>
+                <Button x:Name="StartButton" Content="Launch Rally-Xtreme" Margin="50,957,50,50" Background="Orange" FontFamily="Arial" FontWeight="Black" Click="StartButton_Click"/>
+                <Button x:Name="AIMenu" Content="Video" Margin="50,901,50,100" FontFamily="Arial" Click="AIMenu_Click"/>
             </Grid>
 
         </Grid>

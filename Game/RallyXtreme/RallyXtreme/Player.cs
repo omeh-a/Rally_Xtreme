@@ -22,6 +22,7 @@ namespace RallyXtreme
         public int gridX;
         public int gridY;
         public ushort direction;
+        public ushort prevDirection;
         public bool alive;
         public int lives;
         public int gridPixelSize;
@@ -30,20 +31,77 @@ namespace RallyXtreme
     class Player
     {
         
-        public static playerChar updatePos(ushort desiredDirection, playerChar player)
+        public static playerChar updatePos(ushort desiredDirection, playerChar player, gamegrid grid)
         {
+            /* This function checks for walls and obstructions before issuing the instruction for the car to move.
+             * 
+             */
 
 
-            player = stepFoward(desiredDirection, player);
+            if (desiredDirection == 0 && player.gridY > 0)
+            {
+                // Turning north
+                if ((grid.collisions[player.gridX][player.gridY - 1] != '$') && (grid.collisions[player.gridX][player.gridY - 1] != '0')) 
+                {
+                    player = stepForward(desiredDirection, player, grid);
+                    player.prevDirection = player.direction;
+                } else
+                {
+                    player = stepForwardAuto(desiredDirection, player, grid);
+                }
+            } else if (desiredDirection == 2 && player.gridY < grid.ySize) 
+            {
+                // Turning south
+                if ((grid.collisions[player.gridX][player.gridY + 1] != '$') && (grid.collisions[player.gridX][player.gridY + 1] != '0'))
+                {
+                    player = stepForward(desiredDirection, player, grid);
+                    player.prevDirection = player.direction;
+                }
+                else
+                {
+                    player = stepForwardAuto(desiredDirection, player, grid);
+                }
+            } else if (desiredDirection == 1 && player.gridX < grid.xSize)
+            {
+                // Turning east
+                if ((grid.collisions[player.gridX + 1][player.gridY] != '$') && (grid.collisions[player.gridX + 1][player.gridY] != '0'))
+                {
+                    player = stepForward(desiredDirection, player, grid);
+                    player.prevDirection = player.direction;
+                }
+                else
+                {
+                    player = stepForwardAuto(desiredDirection, player, grid);
+                }
+            } else if (desiredDirection == 3 && player.gridX > 0)
+            {
+                // Turning west
+                if ((grid.collisions[player.gridX + 1][player.gridY] != '$') && (grid.collisions[player.gridX + 1][player.gridY] != '0'))
+                {
+                    player = stepForward(desiredDirection, player, grid);
+                    player.prevDirection = player.direction;
+                }
+                else
+                {
+                    player = stepForwardAuto(desiredDirection, player, grid);
+                    Console.WriteLine("Autostep");
+                }
+            }
 
+            // player = stepForward(desiredDirection, player);
+            
             return player;
         }
 
-        public static playerChar stepFoward(ushort direction, playerChar player)
+        public static playerChar stepForward(ushort direction, playerChar player, gamegrid grid)
         {
 
             if (direction == 1 && player.gridX < 14)
             {
+                if (grid.collisions[player.gridX][player.gridY-1] != '$' && grid.collisions[player.gridX][player.gridY - 1] != '0')
+                {
+
+                }
                 player.gridX += 1;
                 player.direction = 1;
             }
@@ -70,6 +128,14 @@ namespace RallyXtreme
 
             player.pos = new Vector2(((player.gridX * player.gridPixelSize) + player.gridPixelSize / 2),
                 ((player.gridY * player.gridPixelSize)) + player.gridPixelSize / 2);
+
+            return player;
+        }
+
+        public static playerChar stepForwardAuto(ushort failedDirection, playerChar player, gamegrid grid)
+        {
+
+
 
             return player;
         }
