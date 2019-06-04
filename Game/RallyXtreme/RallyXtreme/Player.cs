@@ -34,25 +34,28 @@ namespace RallyXtreme
         public static playerChar updatePos(ushort desiredDirection, playerChar player, gamegrid grid)
         {
             /* This function checks for walls and obstructions before issuing the instruction for the car to move.
-             * 
+             * NOTE! -> Coordinates are in reverse order -> (y, x)
              */
 
 
             if (desiredDirection == 0 && player.gridY > 0)
             {
                 // Turning north
-                if ((grid.collisions[player.gridX][player.gridY - 1] != '$') && (grid.collisions[player.gridX][player.gridY - 1] != '0')) 
+                if ((grid.collisions[player.gridY - 1][player.gridX] != '$') && (grid.collisions[player.gridY - 1][player.gridX] != '0'))
                 {
                     player = stepForward(desiredDirection, player, grid);
                     player.prevDirection = player.direction;
-                } else
+                }
+                else
                 {
                     player = stepForwardAuto(desiredDirection, player, grid);
+                    Console.WriteLine("AutostepNorth");
                 }
-            } else if (desiredDirection == 2 && player.gridY < grid.ySize) 
+            }
+            else if (desiredDirection == 2 && player.gridY < grid.ySize)
             {
                 // Turning south
-                if ((grid.collisions[player.gridX][player.gridY + 1] != '$') && (grid.collisions[player.gridX][player.gridY + 1] != '0'))
+                if ((grid.collisions[player.gridY + 1][player.gridX] != '$') && (grid.collisions[player.gridY + 1][player.gridX] != '0'))
                 {
                     player = stepForward(desiredDirection, player, grid);
                     player.prevDirection = player.direction;
@@ -60,23 +63,28 @@ namespace RallyXtreme
                 else
                 {
                     player = stepForwardAuto(desiredDirection, player, grid);
+                    Console.WriteLine("AutostepSouth");
                 }
-            } else if (desiredDirection == 1 && player.gridX < grid.xSize)
+            }
+            else if (desiredDirection == 1 && player.gridX < grid.xSize)
             {
                 // Turning east
-                if ((grid.collisions[player.gridX + 1][player.gridY] != '$') && (grid.collisions[player.gridX + 1][player.gridY] != '0'))
+                if ((grid.collisions[player.gridY][player.gridX + 1] != '$') && (grid.collisions[player.gridY][player.gridX + 1] != '0'))
                 {
                     player = stepForward(desiredDirection, player, grid);
                     player.prevDirection = player.direction;
+
                 }
                 else
                 {
                     player = stepForwardAuto(desiredDirection, player, grid);
+                    Console.WriteLine($"AutostepEast");
                 }
-            } else if (desiredDirection == 3 && player.gridX > 0)
+            }
+            else if (desiredDirection == 3 && player.gridX > 0)
             {
                 // Turning west
-                if ((grid.collisions[player.gridX + 1][player.gridY] != '$') && (grid.collisions[player.gridX + 1][player.gridY] != '0'))
+                if ((grid.collisions[player.gridY][player.gridX - 1] != '$') && (grid.collisions[player.gridY][player.gridX - 1] != '0'))
                 {
                     player = stepForward(desiredDirection, player, grid);
                     player.prevDirection = player.direction;
@@ -84,18 +92,18 @@ namespace RallyXtreme
                 else
                 {
                     player = stepForwardAuto(desiredDirection, player, grid);
-                    Console.WriteLine("Autostep");
+                    Console.WriteLine($"AutostepWest");
                 }
             }
 
-            // player = stepForward(desiredDirection, player);
             
             return player;
         }
 
         public static playerChar stepForward(ushort direction, playerChar player, gamegrid grid)
         {
-
+            // This function moves the player from one square to another, unless the the square
+            // it is ordered to move to is a border tile ($)
             if (direction == 1 && player.gridX < 14)
             {
                 if (grid.collisions[player.gridX][player.gridY-1] != '$' && grid.collisions[player.gridX][player.gridY - 1] != '0')
@@ -132,12 +140,75 @@ namespace RallyXtreme
             return player;
         }
 
+        public static char checkDir(ushort direction, playerChar player, gamegrid grid)
+        {
+            // This function returns the contents of a square in a direction relative to player
+
+            Console.WriteLine($"#PLAYER# Checking dir{direction}");
+            char contents = ' ';
+            if (direction == 0)
+            {
+                contents = grid.collisions[player.gridY - 1][player.gridX];
+            }
+            else if (direction == 1)
+            {
+                contents = grid.collisions[player.gridY][player.gridX + 1];
+            }
+            else if (direction == 2)
+            {
+                contents = grid.collisions[player.gridY + 1][player.gridX];
+            }
+            else if (direction == 3)
+            {
+                contents = grid.collisions[player.gridY][player.gridX - 1];
+            }
+            else
+            {
+                contents = 'x';
+                Console.WriteLine($"#PLAYER# Checkdir was given an invalid direction -> {direction}");
+            }
+            return contents;
+        }
+
         public static playerChar stepForwardAuto(ushort failedDirection, playerChar player, gamegrid grid)
         {
+            /* This function is responsible for reorienting the player if they try make
+             * an invalid turn. It will try and put the player back on the path they were
+             * last on, or else try and find a suitable direction
+             * 
+             */
 
+
+            if (checkDir(player.prevDirection, player, grid) != '0' && checkDir(player.prevDirection, player, grid) != '$')
+            {
+                player = Player.stepForward(player.prevDirection, player, grid);
+            }
+            else
+            {
+                if (failedDirection == 0)
+                {
+
+                }
+                else if (failedDirection == 1)
+                {
+
+                }
+                else if (failedDirection == 2)
+                {
+
+                }
+                else if (failedDirection == 3)
+                {
+
+                }
+            }
+            
 
 
             return player;
+
+
+
         }
 
         public static void kill(playerChar player)

@@ -82,10 +82,10 @@ namespace RallyXtreme
             carSpeed = 250f;
             carRotation = 0f;
 
-            /*if (MapLoad.checkMap(gameMap) == false)
-            {
-                // add function to crash program here
-            }*/
+
+            Console.WriteLine($"#GAME# Grid X limit = {mainGrid.xSize}, Grid Y limit = {mainGrid.ySize}");
+
+
             base.Initialize();
         }
 
@@ -154,7 +154,7 @@ namespace RallyXtreme
             {
                 player0 = Player.updatePos(nextDirection, player0, mainGrid);
                 score++;
-                Console.WriteLine($"#GAME# Movement tick -> Player = ({player0.gridX},{player0.gridY})");
+                Console.WriteLine($"#GAME# Movement tick -> Player = ({player0.gridX},{player0.gridY}) nextDir = {nextDirection}, trueDir = {player0.direction}");
                 accumulator = 0;
             }
             carRotation = Player.reportRotation(player0);
