@@ -124,8 +124,8 @@ namespace RallyXtreme
         {
             // gameTime.ElapsedGameTime.Totalseconds is used here to ensure consistent timings between activations because each update
             // frame is not neccesarily the same length.
-            
-            
+
+    
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
@@ -153,6 +153,7 @@ namespace RallyXtreme
             if ((accumulator) > 0.3)
             {
                 player0 = Player.updatePos(nextDirection, player0, mainGrid);
+                nextDirection = player0.direction;
                 score++;
                 Console.WriteLine($"#GAME# Movement tick -> Player = ({player0.gridX},{player0.gridY}) nextDir = {nextDirection}, trueDir = {player0.direction}");
                 accumulator = 0;

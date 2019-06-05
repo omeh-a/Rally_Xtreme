@@ -36,7 +36,8 @@ namespace RallyXtreme
             /* This function checks for walls and obstructions before issuing the instruction for the car to move.
              * NOTE! -> Coordinates are in reverse order -> (y, x)
              */
-
+            if (desiredDirection == 4)
+                desiredDirection = player.prevDirection;
 
             if (desiredDirection == 0 && player.gridY > 0)
             {
@@ -94,7 +95,7 @@ namespace RallyXtreme
                     player = stepForwardAuto(desiredDirection, player, grid);
                     Console.WriteLine($"AutostepWest");
                 }
-            }
+            } 
 
             
             return player;
@@ -106,10 +107,6 @@ namespace RallyXtreme
             // it is ordered to move to is a border tile ($)
             if (direction == 1 && player.gridX < 14)
             {
-                if (grid.collisions[player.gridX][player.gridY-1] != '$' && grid.collisions[player.gridX][player.gridY - 1] != '0')
-                {
-
-                }
                 player.gridX += 1;
                 player.direction = 1;
             }
@@ -177,7 +174,7 @@ namespace RallyXtreme
              * last on, or else try and find a suitable direction
              * 
              */
-
+            ushort dir = 0;
 
             if (checkDir(player.prevDirection, player, grid) != '0' && checkDir(player.prevDirection, player, grid) != '$')
             {
@@ -185,24 +182,62 @@ namespace RallyXtreme
             }
             else
             {
+                
                 if (failedDirection == 0)
                 {
-
+                    if (checkDir(1, player, grid) != '$' && checkDir(1, player, grid) != '0')
+                    {
+                        dir = 1;
+                    }
+                    else if (checkDir(3, player, grid) != '$' && checkDir(3, player, grid) != '0')
+                    {
+                        dir = 3;
+                    }
+                    //else
+                      //  dir = 2;
                 }
                 else if (failedDirection == 1)
                 {
-
+                    if (checkDir(0, player, grid) != '$' && checkDir(0, player, grid) != '0')
+                    {
+                        dir = 0;
+                    }
+                    else if (checkDir(2, player, grid) != '$' && checkDir(2, player, grid) != '0')
+                    {
+                        dir = 2;
+                    }
+                    //else
+                      //  dir = 3;
                 }
                 else if (failedDirection == 2)
                 {
-
+                    if (checkDir(1, player, grid) != '$' && checkDir(1, player, grid) != '0')
+                    {
+                        dir = 1;
+                    }
+                    else if (checkDir(3, player, grid) != '$' && checkDir(3, player, grid) != '0')
+                    {
+                        dir = 3;
+                    }
+                    //else
+                      //  dir = 0;
                 }
                 else if (failedDirection == 3)
                 {
-
+                    if (checkDir(0, player, grid) != '$' && checkDir(0, player, grid) != '0')
+                    {
+                        dir = 0;
+                    }
+                    else if (checkDir(2, player, grid) != '$' && checkDir(2, player, grid) != '0')
+                    {
+                        dir = 2;
+                    }
+                    //else
+                      //  dir = 1;
                 }
             }
-            
+            player = Player.stepForward(dir, player, grid);
+            //player.prevDirection = dir;
 
 
             return player;
