@@ -109,21 +109,15 @@ namespace RallyXtreme
             {
                 player.gridX += 1;
                 player.direction = 1;
-            }
-
-            if (direction == 3 && player.gridX > 1)
+            } else if (direction == 3 && player.gridX > 1)
             {
                 player.gridX -= 1;
                 player.direction = 3;
-            }
-
-            if (direction == 0 && player.gridY > 1)
+            } else if (direction == 0 && player.gridY > 1)
             {
                 player.gridY -= 1;
                 player.direction = 0;
-            }
-
-            if (direction == 2 && player.gridY < 13)
+            } else if (direction == 2 && player.gridY < 13)
             {
                 player.gridY += 1;
                 player.direction = 2;
@@ -176,12 +170,13 @@ namespace RallyXtreme
              */
             ushort dir = 0;
 
-            if (checkDir(player.prevDirection, player, grid) != '0' && checkDir(player.prevDirection, player, grid) != '$')
+            /*if (checkDir(player.prevDirection, player, grid) != '0' && checkDir(player.prevDirection, player, grid) != '$')
             {
                 player = Player.stepForward(player.prevDirection, player, grid);
             }
-            else
-            {
+             else
+            
+            {*/
                 
                 if (failedDirection == 0)
                 {
@@ -193,8 +188,8 @@ namespace RallyXtreme
                     {
                         dir = 3;
                     }
-                    //else
-                      //  dir = 2;
+                    else
+                        dir = 2;
                 }
                 else if (failedDirection == 1)
                 {
@@ -235,7 +230,7 @@ namespace RallyXtreme
                     //else
                       //  dir = 1;
                 }
-            }
+            //}
             player = Player.stepForward(dir, player, grid);
             //player.prevDirection = dir;
 

@@ -136,21 +136,18 @@ namespace RallyXtreme
             if (kstate.IsKeyDown(Keys.W) || kstate.IsKeyDown(Keys.Up))
             {
                 nextDirection = 0;
-            }
-            if (kstate.IsKeyDown(Keys.S) || kstate.IsKeyDown(Keys.Down))
+            } else if (kstate.IsKeyDown(Keys.S) || kstate.IsKeyDown(Keys.Down))
             {
                 nextDirection = 2;
-            }
-            if (kstate.IsKeyDown(Keys.A) || kstate.IsKeyDown(Keys.Left))
+            } else if (kstate.IsKeyDown(Keys.A) || kstate.IsKeyDown(Keys.Left))
             {
                 nextDirection = 3;
-            }
-            if (kstate.IsKeyDown(Keys.D) || kstate.IsKeyDown(Keys.Right))
+            } else if (kstate.IsKeyDown(Keys.D) || kstate.IsKeyDown(Keys.Right))
             {
                 nextDirection = 1;
             }
 
-            if ((accumulator) > 0.3)
+            if ((accumulator) > 1)
             {
                 player0 = Player.updatePos(nextDirection, player0, mainGrid);
                 nextDirection = player0.direction;
