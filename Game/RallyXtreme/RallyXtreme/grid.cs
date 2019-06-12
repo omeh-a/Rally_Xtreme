@@ -11,7 +11,7 @@ namespace RallyXtreme
     public struct gamegrid
     {
         public char[][] collisions;
-        public char[][] entities;
+        public gameEntity[][] entities;
         public int[,] turnData;
         public int xSize;
         public int ySize;
@@ -23,17 +23,49 @@ namespace RallyXtreme
 
 
 
-    class grid
+    class Grid
     {
         public static char returnEntities(int x, int y, gamegrid grid)
         {
             // This function returns the contents of the entity array
             // if the grid refers to an empty space or a border tile
             // a * will be returned instead.
-            char entity = grid.entities[x][y];
+            char entity = grid.entities[x][y].type;
             if (entity == '$' || entity == '#')
                 entity = '*';
             return entity;
+        }
+
+        public static gamegrid populateFlags(gamegrid grid)
+        {
+            uint flagNumber = (uint) grid.xSize;
+            int f = 0;
+            
+
+            while (f < flagNumber)
+            {
+                
+                int v = 1;
+                Random r = new Random();
+                int rr = 0;
+                while (v <= grid.ySize-1)
+                {
+                    int h = 0;
+                    while (h <= grid.xSize)
+                    {
+                        if (r.Next(0, 5) == 2 && grid.collisions[v][h] == '#')
+                        {
+                            grid.entities[v][h] = Entity.createFlagEntity(grid, (ushort)h, (ushort)v);
+                        }
+                        h++;
+                    }
+                    v++;
+                }
+                    
+            }
+
+
+           return grid;
         }
 
 
@@ -216,58 +248,10 @@ namespace RallyXtreme
             }
 
             debugWriteGridCollisionWrite(newGrid);
-            newGrid.entities = newGrid.collisions;
 
             return newGrid;
         }
-        public static void populateGrid(int[][] grid)
-        {
-            /* This function takes in the generated grid and generates a
-             * complimentary grid of turn information.
-             * 
-             * The map is stored as a 2D array in memory, with a series of 
-             * indicators used to describe information regarding corners pre
-             * -generated to ensure minimal slowdown in game.
-             * 
-             * The game's map is stored as two 2d arrays - one carrying the
-             * collision information consisting of only wall data and the 
-             * other containing only the pathing markers.
-             * 
-             * The markers are as follows:
-             * 
-             * X = Wall
-             * 
-             * T[xy] = a teleport square - these can be used to allow the player
-             *         to be sent to the other side of the map instead of just 
-             *         hitting a dead end, as seen in games like PacMan. 
-             *         X and Y are numeric values representing where the player
-             *         should be sent. These values must be defined by the mapdata
-             *         file, as there is simply no way to automate this.
-             * 
-             * 0 = A dead end. The player can only go backwards in these. Ideally
-             *     these should not be used as they are unpleasant to the player.
-             * 
-             * 1 = A square where there is no possible turn. The player may only
-             *     proceed forward or backwards. No additional data is needed as
-             *     the game knows there is only one possible command in this square
-             *     (backwards).
-             *     
-             * 2[d1d2] = A square where a turn is mandatory. The two possible 
-             *             directions are stored in d1 and d2 as a compass 
-             *              direction (N, E, S, W). Formatted as "2NE" or 2"SW".
-             *
-             * 3[d1] = A square which forms a T-intersect. Since all directions
-             *         but one are turnable, only the invalid one is stored as d1.
-             *         
-             * 4 = A square forming a 4 way intersection. A turn may be made in
-             *     any direction so no additional data is required.
-             */
 
-
-
-
-
-        }
 
         public static void debugWriteGridCollisionWrite(gamegrid toTest)
         {

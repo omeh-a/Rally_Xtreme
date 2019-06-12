@@ -22,7 +22,7 @@ namespace RallyXtreme
         public string aiDirectory = CacheLoad.getAi();
         public int difficulty = CacheLoad.getDifficulty();
         // public static MapLoad.map gameMap = new MapLoad.map();
-        public gamegrid mainGrid = grid.generateGrid(CacheLoad.getMap());
+        public gamegrid mainGrid = Grid.generateGrid(CacheLoad.getMap());
         public playerChar player0 = new playerChar();
         public enemyChar enemy0 = AI.createEnemy(CacheLoad.getAi());
         Texture2D car;
@@ -37,6 +37,7 @@ namespace RallyXtreme
         public int tickLimit = 10000000;
         double accumulator = 0f;
         ushort nextDirection = 4;
+        double tickTime = 0.333f;
 
         public Game1()
         {
@@ -84,7 +85,7 @@ namespace RallyXtreme
 
 
             Console.WriteLine($"#GAME# Grid X limit = {mainGrid.xSize}, Grid Y limit = {mainGrid.ySize}");
-
+            mainGrid = Grid.populateFlags(mainGrid);
 
             base.Initialize();
         }
@@ -124,7 +125,7 @@ namespace RallyXtreme
         {
             // gameTime.ElapsedGameTime.Totalseconds is used here to ensure consistent timings between activations because each update
             // frame is not neccesarily the same length.
-
+            // An accumulator is used for timing, adding up the time since each previous frame in order to funtion as a timer.
     
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -147,7 +148,7 @@ namespace RallyXtreme
                 nextDirection = 1;
             }
 
-            if ((accumulator) > 1)
+            if ((accumulator) > tickTime)
             {
                 player0 = Player.updatePos(nextDirection, player0, mainGrid);
                 nextDirection = player0.direction;
@@ -189,31 +190,33 @@ namespace RallyXtreme
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            ushort y = 0;
             // TODO: Add your drawing code here
             spriteBatch.Begin();
             spriteBatch.Draw(background, new Vector2(0, 0), Color.White);
-            spriteBatch.Draw(car, carPosition, new Rectangle(0,0,70,70), Color.White, carRotation, new Vector2(35,35), 1.0f, SpriteEffects.None, 1);
-            spriteBatch.DrawString(font, $"SCORE = {score}", new Vector2(50, 50), Color.Black);
+            if (player0.alive == true)
+            {
+                spriteBatch.Draw(car, carPosition, new Rectangle(0, 0, 70, 70), Color.White, carRotation, new Vector2(35, 35), 1.0f, SpriteEffects.None, 1);
+            }
+
+            while (y <= mainGrid.ySize)
+            {
+                ushort x = 0;
+                while (x <= mainGrid.xSize)
+                {
+                    if (mainGrid.entities[y][x].)
+                    spriteBatch.Draw()
+                }
+
+            }
+            
+            spriteBatch.DrawString(font, $"SCORE = {player0.score}", new Vector2(50, 50), Color.Black);
             spriteBatch.End();
 
             base.Draw(gameTime);
             // like update method, but for graphics only
         }
 
-        /* protected void carMovement(int direction)
-         {
-             if (direction == 0) ;
-                 carPosition.Y -= carSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-             if (kstate.IsKeyDown(Keys.S) || kstate.IsKeyDown(Keys.Down))
-                 carPosition.Y += carSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-             if (kstate.IsKeyDown(Keys.A) || kstate.IsKeyDown(Keys.Left))
-                 carPosition.X -= carSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-             if (kstate.IsKeyDown(Keys.D) || kstate.IsKeyDown(Keys.Right))
-                 carPosition.X += carSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-         }*/
+        
     }
 }

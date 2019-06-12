@@ -51,6 +51,7 @@
       <DependentUpon>carValues.resx</DependentUpon>
     </Compile>
     <Compile Include="Const.cs" />
+    <Compile Include="Entity.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="grid.cs" />
     <Compile Include="MapLoad.cs" />

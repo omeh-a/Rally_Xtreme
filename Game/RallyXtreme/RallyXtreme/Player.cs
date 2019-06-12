@@ -14,7 +14,6 @@ namespace RallyXtreme
     public struct playerChar
     {
         public string name;
-        public int speed;
         public int pixelXY;
         public int ability;
         public string modelDirectory;
@@ -26,6 +25,8 @@ namespace RallyXtreme
         public bool alive;
         public int lives;
         public int gridPixelSize;
+        public uint score;
+        public int speed;
     }
 
     class Player
@@ -36,66 +37,79 @@ namespace RallyXtreme
             /* This function checks for walls and obstructions before issuing the instruction for the car to move.
              * NOTE! -> Coordinates are in reverse order -> (y, x)
              */
-            if (desiredDirection == 4)
-                desiredDirection = player.prevDirection;
 
-            if (desiredDirection == 0 && player.gridY > 0)
+            // The below if/else statement checks for flags to give score and checks for enemies to kill the player.
+            if (Grid.returnEntities(player.gridX, player.gridY, grid) == 'f')
             {
-                // Turning north
-                if ((grid.collisions[player.gridY - 1][player.gridX] != '$') && (grid.collisions[player.gridY - 1][player.gridX] != '0'))
-                {
-                    player = stepForward(desiredDirection, player, grid);
-                    player.prevDirection = player.direction;
-                }
-                else
-                {
-                    player = stepForwardAuto(desiredDirection, player, grid);
-                    Console.WriteLine("AutostepNorth");
-                }
-            }
-            else if (desiredDirection == 2 && player.gridY < grid.ySize)
+                player.score += 100;
+            } else if (Grid.returnEntities(player.gridX, player.gridY, grid) == 'b' || Grid.returnEntities(player.gridX, player.gridY, grid) == 'r')
             {
-                // Turning south
-                if ((grid.collisions[player.gridY + 1][player.gridX] != '$') && (grid.collisions[player.gridY + 1][player.gridX] != '0'))
-                {
-                    player = stepForward(desiredDirection, player, grid);
-                    player.prevDirection = player.direction;
-                }
-                else
-                {
-                    player = stepForwardAuto(desiredDirection, player, grid);
-                    Console.WriteLine("AutostepSouth");
-                }
-            }
-            else if (desiredDirection == 1 && player.gridX < grid.xSize)
+                player = Player.kill(player);
+            } else
             {
-                // Turning east
-                if ((grid.collisions[player.gridY][player.gridX + 1] != '$') && (grid.collisions[player.gridY][player.gridX + 1] != '0'))
-                {
-                    player = stepForward(desiredDirection, player, grid);
-                    player.prevDirection = player.direction;
+                if (desiredDirection == 4)
+                    desiredDirection = player.prevDirection;
 
-                }
-                else
+                if (desiredDirection == 0 && player.gridY > 0)
                 {
-                    player = stepForwardAuto(desiredDirection, player, grid);
-                    Console.WriteLine($"AutostepEast");
+                    // Turning north
+                    if ((grid.collisions[player.gridY - 1][player.gridX] != '$') && (grid.collisions[player.gridY - 1][player.gridX] != '0'))
+                    {
+                        player = stepForward(desiredDirection, player, grid);
+                        player.prevDirection = player.direction;
+                    }
+                    else
+                    {
+                        player = stepForwardAuto(desiredDirection, player, grid);
+                        Console.WriteLine("AutostepNorth");
+                    }
+                }
+                else if (desiredDirection == 2 && player.gridY < grid.ySize)
+                {
+                    // Turning south
+                    if ((grid.collisions[player.gridY + 1][player.gridX] != '$') && (grid.collisions[player.gridY + 1][player.gridX] != '0'))
+                    {
+                        player = stepForward(desiredDirection, player, grid);
+                        player.prevDirection = player.direction;
+                    }
+                    else
+                    {
+                        player = stepForwardAuto(desiredDirection, player, grid);
+                        Console.WriteLine("AutostepSouth");
+                    }
+                }
+                else if (desiredDirection == 1 && player.gridX < grid.xSize)
+                {
+                    // Turning east
+                    if ((grid.collisions[player.gridY][player.gridX + 1] != '$') && (grid.collisions[player.gridY][player.gridX + 1] != '0'))
+                    {
+                        player = stepForward(desiredDirection, player, grid);
+                        player.prevDirection = player.direction;
+
+                    }
+                    else
+                    {
+                        player = stepForwardAuto(desiredDirection, player, grid);
+                        Console.WriteLine($"AutostepEast");
+                    }
+                }
+                else if (desiredDirection == 3 && player.gridX > 0)
+                {
+                    // Turning west
+                    if ((grid.collisions[player.gridY][player.gridX - 1] != '$') && (grid.collisions[player.gridY][player.gridX - 1] != '0'))
+                    {
+                        player = stepForward(desiredDirection, player, grid);
+                        player.prevDirection = player.direction;
+                    }
+                    else
+                    {
+                        player = stepForwardAuto(desiredDirection, player, grid);
+                        Console.WriteLine($"AutostepWest");
+                    }
                 }
             }
-            else if (desiredDirection == 3 && player.gridX > 0)
-            {
-                // Turning west
-                if ((grid.collisions[player.gridY][player.gridX - 1] != '$') && (grid.collisions[player.gridY][player.gridX - 1] != '0'))
-                {
-                    player = stepForward(desiredDirection, player, grid);
-                    player.prevDirection = player.direction;
-                }
-                else
-                {
-                    player = stepForwardAuto(desiredDirection, player, grid);
-                    Console.WriteLine($"AutostepWest");
-                }
-            } 
+
+            
 
             
             return player;
@@ -161,6 +175,11 @@ namespace RallyXtreme
             return contents;
         }
 
+        public static void animate(playerChar player, ushort prevX, ushort prevY) 
+        {
+
+        }
+
         public static playerChar stepForwardAuto(ushort failedDirection, playerChar player, gamegrid grid)
         {
             /* This function is responsible for reorienting the player if they try make
@@ -170,13 +189,6 @@ namespace RallyXtreme
              */
             ushort dir = 0;
 
-            /*if (checkDir(player.prevDirection, player, grid) != '0' && checkDir(player.prevDirection, player, grid) != '$')
-            {
-                player = Player.stepForward(player.prevDirection, player, grid);
-            }
-             else
-            
-            {*/
                 
                 if (failedDirection == 0)
                 {
@@ -241,12 +253,13 @@ namespace RallyXtreme
 
         }
 
-        public static void kill(playerChar player)
+        public static playerChar kill(playerChar player)
         {
             //stub
             Console.Out.WriteLine("#PLAYER# Player has been killed !");
             player.alive = false;
             player.lives = player.lives - 1;
+            return player;
         }
 
         public static void giveLife(playerChar player)
@@ -295,6 +308,7 @@ namespace RallyXtreme
             newPlayer.alive = true;
             newPlayer.direction = 0;
             newPlayer.gridPixelSize = grid.pixelSize;
+            newPlayer.score = 0;
 
             
             newPlayer.gridX = grid.playerStart[0];

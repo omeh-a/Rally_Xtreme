@@ -12,7 +12,7 @@
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="82*"/>
         </Grid.ColumnDefinitions>
-        <Image Margin="472.667,70,524.667,696" Source="logo.png" Stretch="Fill" Grid.Column="1"/>
+        <Image Margin="472.667,70,524.667,714" Source="logo.png" Stretch="Fill" Grid.Column="1"/>
         <Grid Grid.ColumnSpan="2" Margin="0,0,-0.334,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"/>
