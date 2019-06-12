@@ -27,6 +27,7 @@ namespace RallyXtreme
         public enemyChar enemy0 = AI.createEnemy(CacheLoad.getAi());
         Texture2D car;
         Texture2D background;
+        Texture2D flag;
         Vector2 carPosition;
         float carRotation;
         float carSpeed;
@@ -37,7 +38,7 @@ namespace RallyXtreme
         public int tickLimit = 10000000;
         double accumulator = 0f;
         ushort nextDirection = 4;
-        double tickTime = 0.333f;
+        double tickTime = 0.4f;
 
         public Game1()
         {
@@ -82,11 +83,11 @@ namespace RallyXtreme
             carPosition = player0.pos;
             carSpeed = 250f;
             carRotation = 0f;
+            mainGrid = Grid.populateFlags(mainGrid);
 
 
             Console.WriteLine($"#GAME# Grid X limit = {mainGrid.xSize}, Grid Y limit = {mainGrid.ySize}");
-            mainGrid = Grid.populateFlags(mainGrid);
-
+            
             base.Initialize();
         }
 
@@ -104,6 +105,7 @@ namespace RallyXtreme
             car = Content.Load<Texture2D>("goodcar70x70mk1");
             background = Content.Load<Texture2D>("bg");
             font = Content.Load<SpriteFont>("TestFont");
+            flag = Content.Load<Texture2D>("flag_normal");
             // calls graphical stuff mainly
         }
 
@@ -194,22 +196,33 @@ namespace RallyXtreme
             // TODO: Add your drawing code here
             spriteBatch.Begin();
             spriteBatch.Draw(background, new Vector2(0, 0), Color.White);
+
+            y = 0;
+            while (y < mainGrid.ySize)
+            {
+                ushort x = 0;
+                while (x < mainGrid.xSize)
+                {
+
+                    if (Grid.returnEntityType(x, y, mainGrid) == 'f' && Grid.returnEntityState(x, y, mainGrid) == true) 
+                    {
+                        spriteBatch.Draw(flag, mainGrid.entities[y][x].pos, new Rectangle(0, 0, mainGrid.pixelSize, mainGrid.pixelSize), Color.White, 0f,
+                            new Vector2(0, 0), 1f, SpriteEffects.None, 1);
+                        
+                    }
+                        
+                    x++;
+                }
+                y++;
+
+            }
+
             if (player0.alive == true)
             {
                 spriteBatch.Draw(car, carPosition, new Rectangle(0, 0, 70, 70), Color.White, carRotation, new Vector2(35, 35), 1.0f, SpriteEffects.None, 1);
             }
 
-            while (y <= mainGrid.ySize)
-            {
-                ushort x = 0;
-                while (x <= mainGrid.xSize)
-                {
-                    if (mainGrid.entities[y][x].)
-                    spriteBatch.Draw()
-                }
 
-            }
-            
             spriteBatch.DrawString(font, $"SCORE = {player0.score}", new Vector2(50, 50), Color.Black);
             spriteBatch.End();
 

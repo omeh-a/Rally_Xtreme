@@ -25,20 +25,29 @@ namespace RallyXtreme
 
     class Grid
     {
-        public static char returnEntities(int x, int y, gamegrid grid)
+        public static char returnEntityType(int x, int y, gamegrid grid)
         {
             // This function returns the contents of the entity array
             // if the grid refers to an empty space or a border tile
             // a * will be returned instead.
-            char entity = grid.entities[x][y].type;
+            char entity = grid.entities[y][x].type;
             if (entity == '$' || entity == '#')
                 entity = '*';
             return entity;
         }
 
-        public static gamegrid populateFlags(gamegrid grid)
+        public static bool returnEntityState(int x, int y, gamegrid grid)
         {
-            uint flagNumber = (uint) grid.xSize;
+            // This function returns the Activity state of an entity in
+            // the array.
+            bool active= grid.entities[y][x].active;
+            
+            return active;
+        }
+
+        public static gamegrid populateFlags(gamegrid grid0)
+        {
+            uint flagNumber = (uint) grid0.xSize;
             int f = 0;
             
 
@@ -47,25 +56,26 @@ namespace RallyXtreme
                 
                 int v = 1;
                 Random r = new Random();
-                int rr = 0;
-                while (v <= grid.ySize-1)
+                while (v <= grid0.ySize-1)
                 {
                     int h = 0;
-                    while (h <= grid.xSize)
+                    while (h <= grid0.xSize)
                     {
-                        if (r.Next(0, 5) == 2 && grid.collisions[v][h] == '#')
+                        if (r.Next(0, 5) == 2 && grid0.collisions[v][h] == '#')
                         {
-                            grid.entities[v][h] = Entity.createFlagEntity(grid, (ushort)h, (ushort)v);
+                            grid0.entities[v][h] = Entity.createFlagEntity(grid0, (ushort)h, (ushort)v);
+                            f++;
                         }
                         h++;
                     }
                     v++;
+                    System.Console.WriteLine($"#GRID# Generated {v} line of flags");
                 }
                     
             }
 
 
-           return grid;
+           return grid0;
         }
 
 
@@ -249,6 +259,14 @@ namespace RallyXtreme
 
             debugWriteGridCollisionWrite(newGrid);
 
+            newGrid.entities = new gameEntity[newGrid.ySize][];
+            i = 0;
+
+            while (i < newGrid.ySize)
+            {
+                newGrid.entities[i] = new gameEntity[newGrid.xSize];
+                i++;
+            }
             return newGrid;
         }
 

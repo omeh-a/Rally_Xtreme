@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace RallyXtreme
 {
@@ -12,6 +15,8 @@ namespace RallyXtreme
         public ushort x;
         public ushort y;
         public bool active;
+        public Vector2 pos;
+        
     }
 
     class Entity
@@ -26,14 +31,15 @@ namespace RallyXtreme
             newFlag.type = 'f';
             newFlag.x = x;
             newFlag.y = x;
-
+            newFlag.pos = new Vector2((grid.pixelSize * x), (grid.pixelSize * y));
+            newFlag.active = true;
             return newFlag;
         }
 
-        public static gameEntity deactivateEntity(gameEntity entity)
+        public static gamegrid deactivateEntity(ushort x, ushort y, gamegrid grid)
         {
-            entity.active = false;
-            return entity;
+            grid.entities[y][x].active = false;
+            return grid;
         }
     }
 }

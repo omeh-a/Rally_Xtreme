@@ -39,11 +39,16 @@ namespace RallyXtreme
              */
 
             // The below if/else statement checks for flags to give score and checks for enemies to kill the player.
-            if (Grid.returnEntities(player.gridX, player.gridY, grid) == 'f')
+            if (Grid.returnEntityType(player.gridX, player.gridY, grid) == 'f' && Grid.returnEntityState(player.gridX, player.gridY, grid) == true)
             {
                 player.score += 100;
-            } else if (Grid.returnEntities(player.gridX, player.gridY, grid) == 'b' || Grid.returnEntities(player.gridX, player.gridY, grid) == 'r')
+                Console.WriteLine($"#GRID# Flag collected at x{player.gridX}, y{player.gridY}");
+                grid = Entity.deactivateEntity((ushort)player.gridX, (ushort)player.gridY, grid);
+            }
+
+            if (Grid.returnEntityType(player.gridX, player.gridY, grid) == 'b')
             {
+                // This kills the player if they encounter a boulder
                 player = Player.kill(player);
             } else
             {
