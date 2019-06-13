@@ -19,6 +19,7 @@ namespace RallyXtreme
         public string name;
         public int[] playerStart;
         public int[][] enemystart;
+        public uint enemyCount;
     }
 
 
@@ -124,6 +125,7 @@ namespace RallyXtreme
             string xSizeString = "";
             string ySizeString = "";
             string pixelString = "";
+            string enemyCountString = "";
             // these variables must be parsed to ints, as you can only read
             // strings or chars from a text file.
             
@@ -153,6 +155,10 @@ namespace RallyXtreme
                         {
                             newGrid.name = line;
                         }
+                        if (i == 5)
+                        {
+                            enemyCountString = line;
+                        }
                         
                     }
                 }
@@ -165,7 +171,7 @@ namespace RallyXtreme
 
             // The following loop attempts to convert the retrieved strings into ints
             i = 0;
-            while (i <= 3)
+            while (i <= 4)
             {
                 try
                 {
@@ -177,6 +183,9 @@ namespace RallyXtreme
                     {
                         newGrid.pixelSize = Int32.Parse(pixelString);
                         System.Console.WriteLine($"#GRID# Parsed {pixelString} -> {newGrid.pixelSize}");
+                    } else if (i == 4)
+                    {
+                        newGrid.enemyCount = (uint)Int32.Parse(enemyCountString);
                     }
                     
 

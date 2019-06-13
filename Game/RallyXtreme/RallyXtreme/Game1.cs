@@ -28,6 +28,10 @@ namespace RallyXtreme
         Texture2D car;
         Texture2D background;
         Texture2D flag;
+        Texture2D logo;
+        Texture2D fuelBar;
+        Texture2D fuelBg;
+        Texture2D explosion;
         Vector2 carPosition;
         float carRotation;
         float carSpeed;
@@ -39,6 +43,9 @@ namespace RallyXtreme
         double accumulator = 0f;
         ushort nextDirection = 4;
         double tickTime = 0.4f;
+        int uiPixelOffset = 300;
+        int xRes = CacheLoad.getResolutionX();
+        int yRes = CacheLoad.getResolutionY();
 
         public Game1()
         {
@@ -57,8 +64,8 @@ namespace RallyXtreme
                 //gameMap = MapLoad.loadMap(mapDirectory);
             }
             graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferWidth = CacheLoad.getResolutionX();
-            graphics.PreferredBackBufferHeight = CacheLoad.getResolutionY();
+            graphics.PreferredBackBufferWidth = xRes + uiPixelOffset;
+            graphics.PreferredBackBufferHeight = yRes;
 
             Content.RootDirectory = "Content";
         }
@@ -106,6 +113,10 @@ namespace RallyXtreme
             background = Content.Load<Texture2D>("bg");
             font = Content.Load<SpriteFont>("TestFont");
             flag = Content.Load<Texture2D>("flag_normal");
+            logo = Content.Load<Texture2D>("logo");
+            fuelBar = Content.Load<Texture2D>("fuelbar");
+            fuelBg = Content.Load<Texture2D>("fuelbg");
+            explosion = Content.Load<Texture2D>("carexplosion");
             // calls graphical stuff mainly
         }
 
@@ -152,10 +163,17 @@ namespace RallyXtreme
 
             if ((accumulator) > tickTime)
             {
-                player0 = Player.updatePos(nextDirection, player0, mainGrid);
-                nextDirection = player0.direction;
-                score++;
-                Console.WriteLine($"#GAME# Movement tick -> Player = ({player0.gridX},{player0.gridY}) nextDir = {nextDirection}, trueDir = {player0.direction}");
+                if (player0.fuel > 0)
+                {
+                    player0 = Player.updatePos(nextDirection, player0, mainGrid);
+                    nextDirection = player0.direction;
+                    score++;
+                    Console.WriteLine($"#GAME# Movement tick -> Player = ({player0.gridX},{player0.gridY}) nextDir = {nextDirection}, trueDir = {player0.direction}");
+                } else
+                {
+                    player0.alive = false;
+                }
+                
                 accumulator = 0;
             }
             carRotation = Player.reportRotation(player0);
@@ -189,14 +207,18 @@ namespace RallyXtreme
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            // ### CLEARSCREEN DRAW ###
+            GraphicsDevice.Clear(Color.DarkSlateBlue);
 
             ushort y = 0;
-            // TODO: Add your drawing code here
+            
             spriteBatch.Begin();
+
+            // ### BACKGROUND DRAW ###
             spriteBatch.Draw(background, new Vector2(0, 0), Color.White);
 
+
+            // ### ENTITY DRAW ###
             y = 0;
             while (y < mainGrid.ySize)
             {
@@ -217,13 +239,32 @@ namespace RallyXtreme
 
             }
 
+            // ### PLAYER DRAW ###
             if (player0.alive == true)
             {
                 spriteBatch.Draw(car, carPosition, new Rectangle(0, 0, 70, 70), Color.White, carRotation, new Vector2(35, 35), 1.0f, SpriteEffects.None, 1);
+            } else if (player0.alive == false)
+            {
+                // This draws an explosion when the player dies
+                spriteBatch.Draw(explosion, carPosition, new Rectangle(0, 0, 70, 70), Color.White, carRotation, new Vector2(35, 35), 1.0f, SpriteEffects.None, 1);
             }
 
+            // ### UI DRAW ###
+            // Score counter
+            spriteBatch.DrawString(font, $"Score = {player0.score}", new Vector2((float)xRes + uiPixelOffset/4, 90), Color.White);
 
-            spriteBatch.DrawString(font, $"SCORE = {player0.score}", new Vector2(50, 50), Color.Black);
+            // Logo
+            spriteBatch.Draw(logo, new Vector2((float)xRes, 0f), Color.White);
+
+            // Fuel Gauge Label
+            spriteBatch.DrawString(font, $"Fuel: {player0.fuel}", new Vector2((float)xRes + uiPixelOffset / 4, 180), Color.NavajoWhite);
+
+            // Fuel Gauge Background
+            spriteBatch.Draw(fuelBg, new Vector2((float)xRes, 200f), Color.White);
+
+            // Fuel Gauge
+            spriteBatch.Draw(fuelBar, new Vector2((float)xRes, 200f), new Rectangle(0, 0, 3*((int)player0.fuel), 70), Color.White);
+
             spriteBatch.End();
 
             base.Draw(gameTime);

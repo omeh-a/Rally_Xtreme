@@ -27,6 +27,7 @@ namespace RallyXtreme
         public int gridPixelSize;
         public uint score;
         public int speed;
+        public float fuel;
     }
 
     class Player
@@ -142,7 +143,7 @@ namespace RallyXtreme
                 player.direction = 2;
             }
 
-
+            player.fuel -= 1f;
 
             player.pos = new Vector2(((player.gridX * player.gridPixelSize) + player.gridPixelSize / 2),
                 ((player.gridY * player.gridPixelSize)) + player.gridPixelSize / 2);
@@ -314,6 +315,7 @@ namespace RallyXtreme
             newPlayer.direction = 0;
             newPlayer.gridPixelSize = grid.pixelSize;
             newPlayer.score = 0;
+            newPlayer.fuel = 100f;
 
             
             newPlayer.gridX = grid.playerStart[0];
