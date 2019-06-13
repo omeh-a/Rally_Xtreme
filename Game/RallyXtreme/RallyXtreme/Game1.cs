@@ -1,8 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 using System;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace RallyXtreme
 {
@@ -32,6 +35,9 @@ namespace RallyXtreme
         Texture2D fuelBar;
         Texture2D fuelBg;
         Texture2D explosion;
+        Song bgMusic;
+        public static List<SoundEffect> sfx;
+        
         Vector2 carPosition;
         float carRotation;
         float carSpeed;
@@ -46,9 +52,13 @@ namespace RallyXtreme
         int uiPixelOffset = 300;
         int xRes = CacheLoad.getResolutionX();
         int yRes = CacheLoad.getResolutionY();
+        bool explode = false;
+        bool playMusic = true;
 
         public Game1()
         {
+            // This list will hold all sound effects
+            sfx = new List<SoundEffect>();
 
 
 
@@ -91,11 +101,23 @@ namespace RallyXtreme
             carSpeed = 250f;
             carRotation = 0f;
             mainGrid = Grid.populateFlags(mainGrid);
-
-
+            sfx.Add(Content.Load<SoundEffect>("SoundFX /bang"));
+            sfx.Add(Content.Load<SoundEffect>("SoundFX /blip"));
+            bgMusic = Content.Load<Song>("Music /too-cool");
+            MediaPlayer.Play(bgMusic);
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;
+            MediaPlayer.Volume = 0.2f;
             Console.WriteLine($"#GAME# Grid X limit = {mainGrid.xSize}, Grid Y limit = {mainGrid.ySize}");
             
             base.Initialize();
+        }
+
+        void MediaPlayer_MediaStateChanged(object sender, System.
+                                           EventArgs e)
+        {
+            // 0.0f is silent, 1.0f is full volume
+            MediaPlayer.Play(bgMusic);
         }
 
         /// <summary>
@@ -161,7 +183,21 @@ namespace RallyXtreme
                 nextDirection = 1;
             }
 
-            if ((accumulator) > tickTime)
+            if (kstate.IsKeyDown(Keys.M))
+            {
+                if (playMusic == true)
+                {
+                    playMusic = false;
+                    MediaPlayer.IsMuted = false;
+                } else if (playMusic == false)
+                {
+                    playMusic = true;
+                    MediaPlayer.IsMuted = true;
+                }
+                    
+            }
+
+                if ((accumulator) > tickTime)
             {
                 if (player0.fuel > 0)
                 {
@@ -172,6 +208,14 @@ namespace RallyXtreme
                 } else
                 {
                     player0.alive = false;
+                    if (explode == false)
+                    {
+                        sfx[0].CreateInstance().Play();
+                        explode = true;
+                    }
+                    MediaPlayer.Pause();
+                    MediaPlayer.Stop();
+                    MediaPlayer.IsMuted = true;
                 }
                 
                 accumulator = 0;
@@ -208,7 +252,7 @@ namespace RallyXtreme
         protected override void Draw(GameTime gameTime)
         {
             // ### CLEARSCREEN DRAW ###
-            GraphicsDevice.Clear(Color.DarkSlateBlue);
+            GraphicsDevice.Clear(Color.DarkGray);
 
             ushort y = 0;
             

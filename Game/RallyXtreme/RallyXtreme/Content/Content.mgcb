@@ -145,6 +145,24 @@
 /processorParam:TextureFormat=Color
 /build:Maps/env_thirteenfourteen/bg.png
 
+#begin Music/too-cool.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/too-cool.mp3
+
+#begin SoundFX/bang.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundFX/bang.wav
+
+#begin SoundFX/blip.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundFX/blip.wav
+
 #begin TestFont.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor

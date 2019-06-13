@@ -7,6 +7,7 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 
 
 namespace RallyXtreme
@@ -45,6 +46,7 @@ namespace RallyXtreme
                 player.score += 100;
                 Console.WriteLine($"#GRID# Flag collected at x{player.gridX}, y{player.gridY}");
                 grid = Entity.deactivateEntity((ushort)player.gridX, (ushort)player.gridY, grid);
+                Game1.sfx[1].CreateInstance().Play();
             }
 
             if (Grid.returnEntityType(player.gridX, player.gridY, grid) == 'b')
