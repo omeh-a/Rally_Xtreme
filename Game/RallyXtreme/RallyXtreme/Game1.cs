@@ -37,11 +37,13 @@ namespace RallyXtreme
         Texture2D explosion;
         Song bgMusic;
         public static List<SoundEffect> sfx;
+        public static double gameTimer = -3f;
         
         Vector2 carPosition;
         float carRotation;
         float carSpeed;
         SpriteFont font;
+        SpriteFont cdFont;
         int score = 0;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -134,6 +136,7 @@ namespace RallyXtreme
             car = Content.Load<Texture2D>("goodcar70x70mk1");
             background = Content.Load<Texture2D>("bg");
             font = Content.Load<SpriteFont>("TestFont");
+            cdFont = Content.Load<SpriteFont>("countIn");
             flag = Content.Load<Texture2D>("flag_normal");
             logo = Content.Load<Texture2D>("logo");
             fuelBar = Content.Load<Texture2D>("fuelbar");
@@ -166,75 +169,85 @@ namespace RallyXtreme
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             var kstate = Keyboard.GetState();
-
-
-
-            if (kstate.IsKeyDown(Keys.W) || kstate.IsKeyDown(Keys.Up))
-            {
-                nextDirection = 0;
-            } else if (kstate.IsKeyDown(Keys.S) || kstate.IsKeyDown(Keys.Down))
-            {
-                nextDirection = 2;
-            } else if (kstate.IsKeyDown(Keys.A) || kstate.IsKeyDown(Keys.Left))
-            {
-                nextDirection = 3;
-            } else if (kstate.IsKeyDown(Keys.D) || kstate.IsKeyDown(Keys.Right))
-            {
-                nextDirection = 1;
-            }
-
             if (kstate.IsKeyDown(Keys.M))
             {
                 if (playMusic == true)
                 {
                     playMusic = false;
                     MediaPlayer.IsMuted = false;
-                } else if (playMusic == false)
+                }
+                else if (playMusic == false)
                 {
                     playMusic = true;
                     MediaPlayer.IsMuted = true;
                 }
-                    
+
             }
+
+            if (gameTimer > 0)
+            {
+                if (kstate.IsKeyDown(Keys.W) || kstate.IsKeyDown(Keys.Up))
+                {
+                    nextDirection = 0;
+                }
+                else if (kstate.IsKeyDown(Keys.S) || kstate.IsKeyDown(Keys.Down))
+                {
+                    nextDirection = 2;
+                }
+                else if (kstate.IsKeyDown(Keys.A) || kstate.IsKeyDown(Keys.Left))
+                {
+                    nextDirection = 3;
+                }
+                else if (kstate.IsKeyDown(Keys.D) || kstate.IsKeyDown(Keys.Right))
+                {
+                    nextDirection = 1;
+                }
+
+
 
                 if ((accumulator) > tickTime)
-            {
-                if (player0.fuel > 0)
                 {
-                    player0 = Player.updatePos(nextDirection, player0, mainGrid);
-                    nextDirection = player0.direction;
-                    score++;
-                    Console.WriteLine($"#GAME# Movement tick -> Player = ({player0.gridX},{player0.gridY}) nextDir = {nextDirection}, trueDir = {player0.direction}");
-                } else
-                {
-                    player0.alive = false;
-                    if (explode == false)
+                    if (player0.fuel > 0)
                     {
-                        sfx[0].CreateInstance().Play();
-                        explode = true;
+                        player0 = Player.updatePos(nextDirection, player0, mainGrid);
+                        nextDirection = player0.direction;
+                        score++;
+                        Console.WriteLine($"#GAME# Movement tick -> Player = ({player0.gridX},{player0.gridY}) nextDir = {nextDirection}, trueDir = {player0.direction}");
                     }
-                    MediaPlayer.Pause();
-                    MediaPlayer.Stop();
-                    MediaPlayer.IsMuted = true;
+                    else
+                    {
+                        player0.alive = false;
+                        if (explode == false)
+                        {
+                            sfx[0].CreateInstance().Play();
+                            explode = true;
+                        }
+                        MediaPlayer.Pause();
+                        MediaPlayer.Stop();
+                        MediaPlayer.IsMuted = true;
+                    }
+
+                    accumulator = 0;
                 }
-                
-                accumulator = 0;
+                carRotation = Player.reportRotation(player0);
+                carPosition = player0.pos;
+
+                // This code makes sure that the car cannot leave the screen by comparing the location of the car to the size of the screen
+                //carPosition.X = Math.Min(Math.Max(car.Width/2, carPosition.X), graphics.PreferredBackBufferWidth - car.Width/2);
+                //carPosition.Y = Math.Min(Math.Max(car.Height/2, carPosition.Y), graphics.PreferredBackBufferHeight - car.Height/2);
+
+                //    N
+                //  # 0 # 
+                //W 3 # 1 E
+                //  # 2 #
+                //    S
             }
-            carRotation = Player.reportRotation(player0);
-            carPosition = player0.pos;
 
-            // This code makes sure that the car cannot leave the screen by comparing the location of the car to the size of the screen
-            //carPosition.X = Math.Min(Math.Max(car.Width/2, carPosition.X), graphics.PreferredBackBufferWidth - car.Width/2);
-            //carPosition.Y = Math.Min(Math.Max(car.Height/2, carPosition.Y), graphics.PreferredBackBufferHeight - car.Height/2);
 
-            //    N
-            //  # 0 # 
-            //W 3 # 1 E
-            //  # 2 #
-            //    S
 
             accumulator += (double) gameTime.ElapsedGameTime.TotalSeconds;
-            
+            if (player0.alive == true)
+                gameTimer += (double) gameTime.ElapsedGameTime.TotalSeconds;
             base.Update(gameTime);
             // TODO: Add your update logic here
             // Called every tick to update game state
@@ -297,8 +310,11 @@ namespace RallyXtreme
             // Score counter
             spriteBatch.DrawString(font, $"Score = {player0.score}", new Vector2((float)xRes + uiPixelOffset/4, 90), Color.White);
 
+            // Timer
+            spriteBatch.DrawString(cdFont, $"Time: {Math.Round(gameTimer, 2)} s", new Vector2((float)xRes + (uiPixelOffset / 5), 900), Color.White);
+
             // Logo
-            spriteBatch.Draw(logo, new Vector2((float)xRes, 0f), Color.White);
+            spriteBatch.Draw(logo, new Vector2((float)xRes, 15f), Color.White);
 
             // Fuel Gauge Label
             spriteBatch.DrawString(font, $"Fuel: {player0.fuel}", new Vector2((float)xRes + uiPixelOffset / 4, 180), Color.NavajoWhite);
@@ -309,6 +325,13 @@ namespace RallyXtreme
             // Fuel Gauge
             spriteBatch.Draw(fuelBar, new Vector2((float)xRes, 200f), new Rectangle(0, 0, 3*((int)player0.fuel), 70), Color.White);
 
+            // Count in
+            if (gameTimer < 0)
+            {
+                spriteBatch.Draw(fuelBg, new Vector2(((xRes + uiPixelOffset) / 2) - 230, (yRes / 2) - 15), Color.White);
+                spriteBatch.DrawString(cdFont, $"Start in... {Math.Round(Math.Abs(gameTimer))}", new Vector2(((xRes + uiPixelOffset)/2)-200, yRes/2), Color.White);
+                
+            }
             spriteBatch.End();
 
             base.Draw(gameTime);

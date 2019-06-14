@@ -49,6 +49,13 @@
 /processorParam:TextureFormat=Color
 /build:Characters/classic/model0.png
 
+#begin countIn.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:countIn.spritefont
+
 #begin Enemies/classic/model0.jpg
 /importer:TextureImporter
 /processor:TextureProcessor

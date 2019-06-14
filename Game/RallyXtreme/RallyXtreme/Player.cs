@@ -195,7 +195,7 @@ namespace RallyXtreme
              * last on, or else try and find a suitable direction
              * 
              */
-            ushort dir = 0;
+            ushort dir = 4;
 
                 
                 if (failedDirection == 0)
