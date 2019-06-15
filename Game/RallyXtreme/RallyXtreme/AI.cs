@@ -4,6 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 
 namespace RallyXtreme
 {
@@ -14,14 +19,35 @@ namespace RallyXtreme
         public int pixelXY;
         public int ability;
         public string modelDirectory;
+        public int variation;
+        public Vector2 pos;
+        public int gridX;
+        public int gridY;
+        public ushort direction;
+        public ushort prevDirection;
+        public int gridPixelSize;
+        public bool active;
     }
 
     class AI
     {
-        
+        public static enemyChar setLocation(enemyChar e, ushort x, ushort y)
+        {
+            e.gridX = x;
+            e.gridY = y;
+            e.pos = new Vector2(x * e.gridPixelSize, y * e.gridPixelSize);
+
+            return e;
+        }
+
+        public static enemyChar activate(enemyChar e)
+        {
+            e.active = true;
+            return e;
+        }
 
 
-        public static enemyChar createEnemy(string enemyDirectory)
+        public static enemyChar createEnemy(string enemyDirectory, int variation, gamegrid g)
         {
             /* This function takes in a directory from the cache read and then
              * attempts to retrieve variables from its datafile in preparation
@@ -30,6 +56,8 @@ namespace RallyXtreme
 
             enemyChar newEnemy = new enemyChar();
             string directory = enemyDirectory;
+            newEnemy.variation = variation;
+            newEnemy.gridPixelSize = g.pixelSize;
             // note that enemyDirectory is called from Game1.cs
 
             Console.WriteLine($"#ENEMY# Preparing to generate from {directory}...");

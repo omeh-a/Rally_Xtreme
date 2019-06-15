@@ -27,10 +27,10 @@ namespace RallyXtreme
         // public static MapLoad.map gameMap = new MapLoad.map();
         public gamegrid mainGrid = Grid.generateGrid(CacheLoad.getMap());
         public playerChar player0 = new playerChar();
-        public enemyChar enemy0 = AI.createEnemy(CacheLoad.getAi());
         Texture2D car;
         Texture2D background;
         Texture2D flag;
+        Texture2D enemyCar;
         Texture2D logo;
         Texture2D fuelBar;
         Texture2D fuelBg;
@@ -56,25 +56,14 @@ namespace RallyXtreme
         int yRes = CacheLoad.getResolutionY();
         bool explode = false;
         bool playMusic = true;
+        enemyChar e0, e1, e2, e3;
 
         public Game1()
         {
             // This list will hold all sound effects
             sfx = new List<SoundEffect>();
 
-
-
-            if (mapDirectory == "debug")
-            {
-                //gameMap = MapLoad.debugLoad(true);
-                // loads a hardloaded map
-                // bool input designates whether the game will run normally
-                // or as debug mode with no victory/end state
-            }
-            else
-            {
-                //gameMap = MapLoad.loadMap(mapDirectory);
-            }
+            // This instantiates the graphics process, declaring a new window with xRes x yRes pixels size.
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = xRes + uiPixelOffset;
             graphics.PreferredBackBufferHeight = yRes;
@@ -94,10 +83,47 @@ namespace RallyXtreme
             // Called after the constructor, used for calling
             // non-graphical stuff.v5\
 
-
+            // Instantiating player and enemies
             player0 = Player.createPlayer(CacheLoad.getPlayer(), mainGrid);
+            e0 = (AI.createEnemy(aiDirectory, 0, mainGrid));
+            e1 = (AI.createEnemy(aiDirectory, 1, mainGrid));
+            e2 = (AI.createEnemy(aiDirectory, 2, mainGrid));
+            e3 = (AI.createEnemy(aiDirectory, 3, mainGrid));
+
             // This assert check crashes the program if the cache is not found
             Debug.Assert(CacheLoad.cacheCheck() == true);
+
+            uint enemyCount = mainGrid.enemyCount;
+
+            
+            // The following statements activate the correct number of enemies for the map, putting them 
+            // in spawn locations marked in the hitbox.rxhb file.
+            if (enemyCount > 0)
+            {
+                
+                e0 = AI.setLocation(e0, (ushort)mainGrid.enemystart[0][0], (ushort)mainGrid.enemystart[0][1]);
+                e0 = AI.activate(e0);
+            }
+                
+            if (enemyCount > 1)
+            {
+                e1 = AI.setLocation(e1, (ushort)mainGrid.enemystart[1][0], (ushort)mainGrid.enemystart[1][1]);
+                e1 = AI.activate(e1);
+            }
+                
+            if (enemyCount > 2)
+            {
+                e2 = AI.setLocation(e2, (ushort)mainGrid.enemystart[2][0], (ushort)mainGrid.enemystart[2][1]);
+                e2 = AI.activate(e2);
+            }
+                
+            if (enemyCount > 3)
+            {
+                e3 = AI.setLocation(e3, (ushort)mainGrid.enemystart[3][0], (ushort)mainGrid.enemystart[3][1]);
+                e3 = AI.activate(e3);
+            }
+               
+
 
             carPosition = player0.pos;
             carSpeed = 250f;
@@ -134,6 +160,7 @@ namespace RallyXtreme
 
             // TODO: use this.Content to load your game content here
             car = Content.Load<Texture2D>("goodcar70x70mk1");
+            
             background = Content.Load<Texture2D>("bg");
             font = Content.Load<SpriteFont>("TestFont");
             cdFont = Content.Load<SpriteFont>("countIn");
@@ -142,6 +169,7 @@ namespace RallyXtreme
             fuelBar = Content.Load<Texture2D>("fuelbar");
             fuelBg = Content.Load<Texture2D>("fuelbg");
             explosion = Content.Load<Texture2D>("carexplosion");
+            enemyCar = Content.Load<Texture2D>("Enemies /Classic / model0");
             // calls graphical stuff mainly
         }
 
