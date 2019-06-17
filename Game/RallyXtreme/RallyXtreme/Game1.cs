@@ -169,7 +169,7 @@ namespace RallyXtreme
             fuelBar = Content.Load<Texture2D>("fuelbar");
             fuelBg = Content.Load<Texture2D>("fuelbg");
             explosion = Content.Load<Texture2D>("carexplosion");
-            enemyCar = Content.Load<Texture2D>("Enemies /Classic / model0");
+            //enemyCar = Content.Load<Texture2D>("Enemies /classic / model0");
             // calls graphical stuff mainly
         }
 
