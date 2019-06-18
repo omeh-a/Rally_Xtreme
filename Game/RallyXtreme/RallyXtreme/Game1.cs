@@ -35,6 +35,8 @@ namespace RallyXtreme
         Texture2D fuelBar;
         Texture2D fuelBg;
         Texture2D explosion;
+        Texture2D wall;
+        Texture2D border;
         Song bgMusic;
         public static List<SoundEffect> sfx;
         public static double gameTimer = -3f;
@@ -57,6 +59,7 @@ namespace RallyXtreme
         bool explode = false;
         bool playMusic = true;
         enemyChar e0, e1, e2, e3;
+        int explosionHappened;
 
         public Game1()
         {
@@ -95,7 +98,7 @@ namespace RallyXtreme
 
             uint enemyCount = mainGrid.enemyCount;
 
-            
+            explosionHappened = 0;
             // The following statements activate the correct number of enemies for the map, putting them 
             // in spawn locations marked in the hitbox.rxhb file.
             if (enemyCount > 0)
@@ -161,7 +164,9 @@ namespace RallyXtreme
             // TODO: use this.Content to load your game content here
             car = Content.Load<Texture2D>("goodcar70x70mk1");
             
-            background = Content.Load<Texture2D>("bg");
+            background = Content.Load<Texture2D>("Internal /dirtyRoadBordered");
+            wall = Content.Load<Texture2D>("Internal /wallBordered");
+            border = Content.Load<Texture2D>("Internal /borderblock");
             font = Content.Load<SpriteFont>("TestFont");
             cdFont = Content.Load<SpriteFont>("countIn");
             flag = Content.Load<Texture2D>("flag_normal");
@@ -169,7 +174,7 @@ namespace RallyXtreme
             fuelBar = Content.Load<Texture2D>("fuelbar");
             fuelBg = Content.Load<Texture2D>("fuelbg");
             explosion = Content.Load<Texture2D>("carexplosion");
-            //enemyCar = Content.Load<Texture2D>("Enemies /classic / model0");
+            enemyCar = Content.Load<Texture2D>("Enemies /classic /model0");
             // calls graphical stuff mainly
         }
 
@@ -197,6 +202,8 @@ namespace RallyXtreme
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             var kstate = Keyboard.GetState();
+
+            // Mute button
             if (kstate.IsKeyDown(Keys.M))
             {
                 if (playMusic == true)
@@ -212,8 +219,15 @@ namespace RallyXtreme
 
             }
 
+            // Suicide key
+            if (kstate.IsKeyDown(Keys.K))
+            {
+                player0 = Player.kill(player0);
+            }
+
             if (gameTimer > 0)
             {
+                // Detecting the player's desired movement
                 if (kstate.IsKeyDown(Keys.W) || kstate.IsKeyDown(Keys.Up))
                 {
                     nextDirection = 0;
@@ -235,12 +249,25 @@ namespace RallyXtreme
 
                 if ((accumulator) > tickTime)
                 {
-                    if (player0.fuel > 0)
+                    if (player0.fuel > 0 && player0.alive == true)
                     {
                         player0 = Player.updatePos(nextDirection, player0, mainGrid);
+                        if (e0.active == true)
+                            e0 = AI.updatePos(e0, player0, mainGrid);
+                        if (e1.active == true)
+                            e1 = AI.updatePos(e1, player0, mainGrid);
+                        if (e2.active == true)
+                            e2 = AI.updatePos(e2, player0, mainGrid);
+                        if (e3.active == true)
+                            e3 = AI.updatePos(e3, player0, mainGrid);
+
+                        if (Player.checkEnemyPos(player0, e0, e1, e2, e3) == false)
+                            player0 = Player.kill(player0);
+
                         nextDirection = player0.direction;
                         score++;
                         Console.WriteLine($"#GAME# Movement tick -> Player = ({player0.gridX},{player0.gridY}) nextDir = {nextDirection}, trueDir = {player0.direction}");
+
                     }
                     else
                     {
@@ -300,7 +327,39 @@ namespace RallyXtreme
             spriteBatch.Begin();
 
             // ### BACKGROUND DRAW ###
-            spriteBatch.Draw(background, new Vector2(0, 0), Color.White);
+            //spriteBatch.Draw(background, new Vector2(0, 0), Color.White);
+
+            y = 0;
+            while (y <= mainGrid.ySize)
+            {
+                ushort x = 0;
+                while (x <= mainGrid.xSize)
+                {
+
+                    if (mainGrid.collisions[y][x] == '#' || mainGrid.collisions[y][x] == 'e' || mainGrid.collisions[y][x] == 's')
+                    {
+                        spriteBatch.Draw(background, new Vector2((x * mainGrid.pixelSize), (y * mainGrid.pixelSize)), new Rectangle(0, 0, mainGrid.pixelSize, mainGrid.pixelSize), 
+                            new Color(mainGrid.roadColour[0], mainGrid.roadColour[1], mainGrid.roadColour[2], (byte)255), 0f,
+                            new Vector2(0, 0), 1f, SpriteEffects.None, 1);
+                    }
+                    else if (mainGrid.collisions[y][x] == '$')
+                    {
+                        spriteBatch.Draw(border, new Vector2((x * mainGrid.pixelSize), (y * mainGrid.pixelSize)), new Rectangle(0, 0, mainGrid.pixelSize, mainGrid.pixelSize),
+                            new Color(mainGrid.borderColour[0], mainGrid.borderColour[1], mainGrid.borderColour[2], (byte)255), 0f,
+                            new Vector2(0, 0), 1f, SpriteEffects.None, 1);
+                    }
+                    else if (mainGrid.collisions[y][x] == '0')
+                    {
+                        spriteBatch.Draw(wall, new Vector2((x * mainGrid.pixelSize), (y * mainGrid.pixelSize)), new Rectangle(0, 0, mainGrid.pixelSize, mainGrid.pixelSize),
+                            new Color(mainGrid.wallColour[0], mainGrid.wallColour[1], mainGrid.wallColour[2], (byte)255), 0f,
+                            new Vector2(0, 0), 1f, SpriteEffects.None, 1);
+                    }
+
+                    x++;
+                }
+                y++;
+
+            }
 
 
             // ### ENTITY DRAW ###
@@ -311,27 +370,32 @@ namespace RallyXtreme
                 while (x < mainGrid.xSize)
                 {
 
-                    if (Grid.returnEntityType(x, y, mainGrid) == 'f' && Grid.returnEntityState(x, y, mainGrid) == true) 
+                    if (mainGrid.collisions[y][x] == '#' && Grid.returnEntityState(x, y, mainGrid) == true)
                     {
                         spriteBatch.Draw(flag, mainGrid.entities[y][x].pos, new Rectangle(0, 0, mainGrid.pixelSize, mainGrid.pixelSize), Color.White, 0f,
                             new Vector2(0, 0), 1f, SpriteEffects.None, 1);
-                        
+
                     }
-                        
+
                     x++;
                 }
                 y++;
 
             }
 
+            // ### ENEMY DRAW ###
+            if (e0.active == true && gameTimer > 0)
+                spriteBatch.Draw(enemyCar, e0.pos, new Rectangle(0, 0, 70, 70), Color.White, ((float)Math.PI * (float)e0.direction), new Vector2(35, 35), 1.0f, SpriteEffects.None, 1);
+
             // ### PLAYER DRAW ###
-            if (player0.alive == true)
+            if (player0.alive == true && gameTimer > 0)
             {
                 spriteBatch.Draw(car, carPosition, new Rectangle(0, 0, 70, 70), Color.White, carRotation, new Vector2(35, 35), 1.0f, SpriteEffects.None, 1);
-            } else if (player0.alive == false)
+            } else if (player0.alive == false && explosionHappened < 40)
             {
                 // This draws an explosion when the player dies
-                spriteBatch.Draw(explosion, carPosition, new Rectangle(0, 0, 70, 70), Color.White, carRotation, new Vector2(35, 35), 1.0f, SpriteEffects.None, 1);
+                spriteBatch.Draw(explosion, carPosition, new Rectangle(0, 0, 70, 70), new Color(255,255,255, (int)(255*(accumulator/tickTime))), carRotation, new Vector2(35, 35), 1.0f, SpriteEffects.None, 1);
+                explosionHappened += 1;
             }
 
             // ### UI DRAW ###

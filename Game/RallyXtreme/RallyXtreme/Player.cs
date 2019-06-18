@@ -33,7 +33,20 @@ namespace RallyXtreme
 
     class Player
     {
-        
+
+        public static bool checkEnemyPos(playerChar p, enemyChar e0, enemyChar e1, enemyChar e2, enemyChar e3)
+        {
+            // This function checks if the player is in the same square as an enemy
+            bool isSafe = true;
+
+            if ((p.gridX == e0.gridX && p.gridY == e0.gridY) || (p.gridX == e1.gridX && p.gridY == e1.gridY) ||
+                (p.gridX == e2.gridX && p.gridY == e2.gridY) || (p.gridX == e3.gridX && p.gridY == e3.gridY))
+                isSafe = false;
+
+            return isSafe; 
+        }
+
+
         public static playerChar updatePos(ushort desiredDirection, playerChar player, gamegrid grid)
         {
             /* This function checks for walls and obstructions before issuing the instruction for the car to move.

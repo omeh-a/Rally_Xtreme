@@ -20,6 +20,9 @@ namespace RallyXtreme
         public int[] playerStart;
         public int[][] enemystart;
         public uint enemyCount;
+        public byte[] roadColour;
+        public byte[] wallColour;
+        public byte[] borderColour;
     }
 
 
@@ -116,8 +119,9 @@ namespace RallyXtreme
 
             string line;
             int i = 0;
-
-
+            newGrid.roadColour = new byte[3];
+            newGrid.wallColour = new byte[3];
+            newGrid.borderColour = new byte[3];
 
             // ############################################################
             // Reading from mapdata
@@ -126,9 +130,12 @@ namespace RallyXtreme
             string ySizeString = "";
             string pixelString = "";
             string enemyCountString = "";
+            string[] roadColourString = new string[3];
+            string[] wallColourString = new string[3];
+            string[] borderColourString = new string[3];
             // these variables must be parsed to ints, as you can only read
             // strings or chars from a text file.
-            
+
             Console.WriteLine("#GRID# attempting to read mapdata.rxtm");
             try
             {
@@ -139,27 +146,46 @@ namespace RallyXtreme
                         // Console.Write("#CACHEREAD# " + line + '\n');
                         i++;
                         if (i == 1)
-                        {
                             xSizeString = line;
-                        }
-                        if (i == 2)
-                        {
-                            ySizeString = line;
-                        }
-                        if (i == 3)
-                        {
-                            pixelString = line;
-                            System.Console.WriteLine($"#GRID# Pixel size = {line}");
-                        }
-                        if (i == 4)
-                        {
-                            newGrid.name = line;
-                        }
-                        if (i == 5)
-                        {
-                            enemyCountString = line;
-                        }
                         
+                        if (i == 2)
+                            ySizeString = line;
+                        
+                        if (i == 3)
+                            pixelString = line;
+                            
+                        if (i == 4)
+                            newGrid.name = line;
+                        
+                        if (i == 5)
+                            enemyCountString = line;
+
+                        if (i == 6)
+                            roadColourString[0] = line;
+
+                        if (i == 7)
+                            roadColourString[1] = line;
+
+                        if (i == 8)
+                            roadColourString[2] = line;
+
+                        if (i == 9)
+                            wallColourString[0] = line;
+
+                        if (i == 10)
+                            wallColourString[1] = line;
+
+                        if (i == 11)
+                            wallColourString[2] = line;
+
+                        if (i == 12)
+                            borderColourString[0] = line;
+
+                        if (i == 13)
+                            borderColourString[1] = line;
+
+                        if (i == 14)
+                            borderColourString[2] = line;
                     }
                 }
             }
@@ -171,7 +197,7 @@ namespace RallyXtreme
 
             // The following loop attempts to convert the retrieved strings into ints
             i = 0;
-            while (i <= 4)
+            while (i <= 13)
             {
                 try
                 {
@@ -180,24 +206,31 @@ namespace RallyXtreme
                     else if (i == 2)
                         newGrid.ySize = Int32.Parse(ySizeString);
                     else if (i == 3)
-                    {
                         newGrid.pixelSize = Int32.Parse(pixelString);
-                        System.Console.WriteLine($"#GRID# Parsed {pixelString} -> {newGrid.pixelSize}");
-                    } else if (i == 4)
-                    {
+                    else if (i == 4)
                         newGrid.enemyCount = (uint)Int32.Parse(enemyCountString);
-                    }
-                    
-
+                    else if (i == 5)
+                        newGrid.roadColour[0] = (byte)Int32.Parse(roadColourString[0]);
+                    else if (i == 6)
+                        newGrid.roadColour[1] = (byte)Int32.Parse(roadColourString[1]);
+                    else if (i == 7)
+                        newGrid.roadColour[2] = (byte)Int32.Parse(roadColourString[2]);
+                    else if (i == 8)
+                        newGrid.wallColour[0] = (byte)Int32.Parse(wallColourString[0]);
+                    else if (i == 9)
+                        newGrid.wallColour[1] = (byte)Int32.Parse(wallColourString[1]);
+                    else if (i == 10)
+                        newGrid.wallColour[2] = (byte)Int32.Parse(wallColourString[2]);
+                    else if (i == 11)
+                        newGrid.borderColour[0] = (byte)Int32.Parse(borderColourString[0]);
+                    else if (i == 12)
+                        newGrid.borderColour[1] = (byte)Int32.Parse(borderColourString[1]);
+                    else if (i == 13)
+                        newGrid.borderColour[2] = (byte)Int32.Parse(borderColourString[2]);
                 }
-                catch (FormatException)
+                catch (FormatException er)
                 {
-                    if (i == 1)
-                        Console.WriteLine($"Unable to parse '{xSizeString}'");
-                    else if (i == 2)
-                        Console.WriteLine($"Unable to parse '{ySizeString}'");
-                    else if (i == 3)
-                        Console.WriteLine($"Unable to parse '{pixelString}'");
+                    Console.WriteLine($"Failed to parse -> {er}");
                 }
                 i++;
             }
@@ -266,7 +299,6 @@ namespace RallyXtreme
                 System.Console.WriteLine($"### GRID READ EXCEPTION -> {er}");
             }
 
-            debugWriteGridCollisionWrite(newGrid);
 
             newGrid.entities = new gameEntity[newGrid.ySize][];
             i = 0;
@@ -280,20 +312,7 @@ namespace RallyXtreme
         }
 
 
-        public static void debugWriteGridCollisionWrite(gamegrid toTest)
-        {
-            string line = string.Empty;
-
-            int i = 0;
-
-            System.Console.WriteLine("HITBOX");
-            while (i < toTest.xSize)
-            {
-                System.Console.WriteLine(toTest.collisions[i]);
-
-                i++;
-            }
-
-        }
+        
+        
     }
 }

@@ -31,11 +31,21 @@ namespace RallyXtreme
 
     class AI
     {
+        public static enemyChar updatePos(enemyChar e, playerChar p, gamegrid g)
+        {
+
+
+
+            return e;
+        }
+
+
         public static enemyChar setLocation(enemyChar e, ushort x, ushort y)
         {
             e.gridX = x;
             e.gridY = y;
-            e.pos = new Vector2(x * e.gridPixelSize, y * e.gridPixelSize);
+            
+            e.pos = new Vector2((x * e.gridPixelSize) + (e.gridPixelSize/2), (y * e.gridPixelSize) + (e.gridPixelSize / 2));
 
             return e;
         }

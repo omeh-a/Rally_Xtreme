@@ -65,7 +65,7 @@
                     <Button x:Name="dButtonMinus" Content="-" Grid.Column="0" />
                 </Grid>
 
-                <Button x:Name="MapSelect" Content="Launch Rally-Xtreme" Grid.Column="1"  Background="DarkOrange" Margin="5"/>
+                <Button x:Name="LaunchButton" Content="Launch Rally-Xtreme" Grid.Column="1"  Background="DarkOrange" Margin="5" FontWeight="Black" FontSize="20"/>
             </StackPanel>
 
 
