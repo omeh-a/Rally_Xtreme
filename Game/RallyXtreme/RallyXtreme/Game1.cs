@@ -52,12 +52,13 @@ namespace RallyXtreme
         public int tickLimit = 10000000;
         double accumulator = 0f;
         ushort nextDirection = 4;
-        double tickTime = 0.4f;
+        double tickTime = 1f;
         int uiPixelOffset = 300;
         int xRes = CacheLoad.getResolutionX();
         int yRes = CacheLoad.getResolutionY();
         bool explode = false;
         bool playMusic = true;
+        bool isPaused;
         enemyChar e0, e1, e2, e3;
         int explosionHappened;
 
@@ -98,6 +99,7 @@ namespace RallyXtreme
 
             uint enemyCount = mainGrid.enemyCount;
 
+            isPaused = false;
             explosionHappened = 0;
             // The following statements activate the correct number of enemies for the map, putting them 
             // in spawn locations marked in the hitbox.rxhb file.
@@ -225,6 +227,15 @@ namespace RallyXtreme
                 player0 = Player.kill(player0);
             }
 
+            // Pause key
+            if (kstate.IsKeyDown(Keys.P))
+            {
+                if (isPaused == true)
+                    isPaused = false;
+                else if (isPaused == false)
+                    isPaused = true;
+            }
+
             if (gameTimer > 0)
             {
                 // Detecting the player's desired movement
@@ -254,6 +265,7 @@ namespace RallyXtreme
                         player0 = Player.updatePos(nextDirection, player0, mainGrid);
                         if (e0.active == true)
                             e0 = AI.updatePos(e0, player0, mainGrid);
+                        AI.distanceToPlayer(e0, player0, mainGrid);
                         if (e1.active == true)
                             e1 = AI.updatePos(e1, player0, mainGrid);
                         if (e2.active == true)
@@ -266,7 +278,7 @@ namespace RallyXtreme
 
                         nextDirection = player0.direction;
                         score++;
-                        Console.WriteLine($"#GAME# Movement tick -> Player = ({player0.gridX},{player0.gridY}) nextDir = {nextDirection}, trueDir = {player0.direction}");
+                        Console.WriteLine($"#GAME# Movement tick -> Player = ({player0.gridX},{player0.gridY})");
 
                     }
                     else
@@ -299,10 +311,13 @@ namespace RallyXtreme
             }
 
 
-
-            accumulator += (double) gameTime.ElapsedGameTime.TotalSeconds;
-            if (player0.alive == true)
-                gameTimer += (double) gameTime.ElapsedGameTime.TotalSeconds;
+            if (isPaused == false)
+            {
+                accumulator += (double)gameTime.ElapsedGameTime.TotalSeconds;
+                if (player0.alive == true)
+                    gameTimer += (double)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            
             base.Update(gameTime);
             // TODO: Add your update logic here
             // Called every tick to update game state
@@ -336,7 +351,7 @@ namespace RallyXtreme
                 while (x <= mainGrid.xSize)
                 {
 
-                    if (mainGrid.collisions[y][x] == '#' || mainGrid.collisions[y][x] == 'e' || mainGrid.collisions[y][x] == 's')
+                    if (mainGrid.collisions[y][x] == '#' || mainGrid.collisions[y][x] == 'e' || mainGrid.collisions[y][x] == 's' || mainGrid.collisions[y][x] == 'n')
                     {
                         spriteBatch.Draw(background, new Vector2((x * mainGrid.pixelSize), (y * mainGrid.pixelSize)), new Rectangle(0, 0, mainGrid.pixelSize, mainGrid.pixelSize), 
                             new Color(mainGrid.roadColour[0], mainGrid.roadColour[1], mainGrid.roadColour[2], (byte)255), 0f,
@@ -416,6 +431,10 @@ namespace RallyXtreme
 
             // Fuel Gauge
             spriteBatch.Draw(fuelBar, new Vector2((float)xRes, 200f), new Rectangle(0, 0, 3*((int)player0.fuel), 70), Color.White);
+
+            // Keys display
+            spriteBatch.DrawString(font, $"       Mute = 'm'", new Vector2(((float)xRes + uiPixelOffset / 4), 300), Color.White);
+            spriteBatch.DrawString(font, $"Kill player = 'k'", new Vector2(((float)xRes + uiPixelOffset / 4), 320), Color.White);
 
             // Count in
             if (gameTimer < 0)

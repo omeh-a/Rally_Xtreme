@@ -27,12 +27,69 @@ namespace RallyXtreme
         public ushort prevDirection;
         public int gridPixelSize;
         public bool active;
+        public ushort searchMode;
     }
 
     class AI
     {
         public static enemyChar updatePos(enemyChar e, playerChar p, gamegrid g)
         {
+           
+            return e;
+        }
+        
+        public static float distanceToPlayer(enemyChar e, playerChar p, gamegrid g)
+        {
+
+            double distance = 0f;
+            double xComponent = 0f;
+            double yComponent = 0f;
+            if (e.gridX > p.gridX)
+                xComponent = (e.gridX - p.gridX);
+            else
+                xComponent = (p.gridX - e.gridX);
+
+            if (e.gridY > p.gridY)
+                yComponent = (e.gridY - p.gridY);
+            else
+                yComponent = (p.gridY - e.gridY);
+
+            xComponent = xComponent * xComponent;
+            yComponent = yComponent * yComponent;
+
+
+            distance = Math.Sqrt(xComponent + yComponent);
+            Console.WriteLine($"Distance = {distance}, AI @ ({e.gridX},{e.gridY}) P @ ({p.gridX},{p.gridY})");
+            return (float)distance;
+        }
+
+
+        public static enemyChar stepFoward(ushort direction, enemyChar e, gamegrid g)
+        {
+            if (direction == 1 && e.gridX < 14)
+            {
+                e.gridX += 1;
+                e.direction = 1;
+            }
+            else if (direction == 3 && e.gridX > 1)
+            {
+                e.gridX -= 1;
+                e.direction = 3;
+            }
+            else if (direction == 0 && e.gridY > 1)
+            {
+                e.gridY -= 1;
+                e.direction = 0;
+            }
+            else if (direction == 2 && e.gridY < 13)
+            {
+                e.gridY += 1;
+                e.direction = 2;
+            }
+
+
+            e.pos = new Vector2(((e.gridX * e.gridPixelSize) + e.gridPixelSize / 2),
+                ((e.gridY * e.gridPixelSize)) + e.gridPixelSize / 2);
 
 
 
