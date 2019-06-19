@@ -37,6 +37,8 @@ namespace RallyXtreme
         Texture2D explosion;
         Texture2D wall;
         Texture2D border;
+        Texture2D gameOver;
+        Texture2D playerLose;
         Song bgMusic;
         public static List<SoundEffect> sfx;
         public static double gameTimer = -3f;
@@ -179,6 +181,8 @@ namespace RallyXtreme
             fuelBg = Content.Load<Texture2D>("fuelbg");
             explosion = Content.Load<Texture2D>("carexplosion");
             enemyCar = Content.Load<Texture2D>("Enemies /classic /model0");
+            gameOver = Content.Load<Texture2D>("gameover");
+            playerLose = Content.Load<Texture2D>("playerlose");
             // calls graphical stuff mainly
         }
 
@@ -450,6 +454,9 @@ namespace RallyXtreme
                 // This draws an explosion when the player dies
                 spriteBatch.Draw(explosion, carPosition, new Rectangle(0, 0, 70, 70), new Color(255,255,255, (int)(255*(accumulator/tickTime))), carRotation, new Vector2(35, 35), 1.0f, SpriteEffects.None, 1);
                 explosionHappened += 1;
+            } else if (player0.alive == false && explosionHappened >= 40)
+            {
+                spriteBatch.Draw(playerLose, new Vector2((xRes/4), (yRes/2)- 150), Color.White);
             }
 
             // ### UI DRAW ###
@@ -482,6 +489,14 @@ namespace RallyXtreme
                 spriteBatch.DrawString(cdFont, $"Start in... {Math.Round(Math.Abs(gameTimer))}", new Vector2(((xRes + uiPixelOffset)/2)-200, yRes/2), Color.White);
                 
             }
+
+            // Game over screen
+            if (gameRunning == false)
+            {
+                spriteBatch.Draw(gameOver, new Vector2((xRes / 4), (yRes / 2) -150), Color.White);
+            }
+
+
             spriteBatch.End();
 
             base.Draw(gameTime);
