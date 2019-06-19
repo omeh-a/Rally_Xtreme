@@ -92,6 +92,24 @@ namespace RallyXtreme
            return grid0;
         }
 
+        public static gamegrid clearFlags(gamegrid grid0)
+        {
+            uint flagNumber = (uint)grid0.xSize;
+            int v = 0;
+            while (v <= grid0.ySize - 1)
+            {
+                int h = 0;
+                while (h < grid0.xSize)
+                {
+                    grid0.entities[v][h] = new gameEntity();
+                    h++;
+                }
+                v++;
+            }    
+            
+            return grid0;
+        }
+
 
         public static gamegrid generateGrid(string mapDirectory)
         {

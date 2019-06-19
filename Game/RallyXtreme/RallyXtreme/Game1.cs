@@ -25,8 +25,8 @@ namespace RallyXtreme
         public string aiDirectory = CacheLoad.getAi();
         public int difficulty = CacheLoad.getDifficulty();
         // public static MapLoad.map gameMap = new MapLoad.map();
-        public gamegrid mainGrid = Grid.generateGrid(CacheLoad.getMap());
-        public playerChar player0 = new playerChar();
+        public static gamegrid mainGrid = Grid.generateGrid(CacheLoad.getMap());
+        public static playerChar player0 = new playerChar();
         Texture2D car;
         Texture2D background;
         Texture2D flag;
@@ -51,19 +51,20 @@ namespace RallyXtreme
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         public int tickLimit = 10000000;
-        double accumulator = 0f;
+        public static double accumulator = 0f;
         ushort nextDirection = 4;
         double tickTime = 0.25f;
         int uiPixelOffset = 300;
         int xRes = CacheLoad.getResolutionX();
         int yRes = CacheLoad.getResolutionY();
-        bool explode = false;
+        public bool explode = false;
         bool playMusic = true;
         bool isPaused;
         bool pauseNextFrame;
-        enemyChar e0, e1, e2, e3;
-        int explosionHappened;
-        bool gameRunning = true;
+        public static enemyChar e0, e1, e2, e3;
+        public static int explosionHappened;
+        public static bool gameRunning = true;
+        private static int enemyCount;
 
         public Game1()
         {
@@ -210,6 +211,14 @@ namespace RallyXtreme
                 Exit();
             var kstate = Keyboard.GetState();
 
+            // Reset Key
+            if (kstate.IsKeyDown(Keys.Delete))
+            {
+                resetGame();
+            }
+
+
+
             // Mute button
             if (kstate.IsKeyDown(Keys.M))
                 MediaPlayer.IsMuted = true;
@@ -324,7 +333,7 @@ namespace RallyXtreme
             if (gameRunning == false)
             {
                 MediaPlayer.IsMuted = true;
-                if (player0.fuel > 0 && accumulator > 0.2f)
+                if (player0.fuel > 0 && accumulator > 0.12f)
                 {
                     player0.fuel -= 1;
                     player0.score += 10;
@@ -469,6 +478,9 @@ namespace RallyXtreme
             // Keys display
             spriteBatch.DrawString(font, $"Mute = 'm' unmute = n", new Vector2(((float)xRes + uiPixelOffset / 4), 300), Color.White);
             spriteBatch.DrawString(font, $"Kill player = 'k'", new Vector2(((float)xRes + uiPixelOffset / 4), 320), Color.White);
+            spriteBatch.DrawString(font, $"Reset game  = 'del'", new Vector2(((float)xRes + uiPixelOffset / 4), 340), Color.White);
+            spriteBatch.DrawString(font, $"Up = 'W' Down = 'S'", new Vector2(((float)xRes + uiPixelOffset / 4), 360), Color.White);
+            spriteBatch.DrawString(font, $"Left = 'A' Right = 'D'", new Vector2(((float)xRes + uiPixelOffset / 4), 380), Color.White);
 
             // Count in
             if (gameTimer < 0)
@@ -491,8 +503,43 @@ namespace RallyXtreme
             // like update method, but for graphics only
         }
 
-        public static void resetGame(gamegrid g, playerChar p, enemyChar e0, enemyChar e1, enemyChar e2, enemyChar e3)
+        public static void resetGame()
         {
+
+            player0 = Player.createPlayer(CacheLoad.getPlayer(), mainGrid);
+            gameTimer = -3;
+            explosionHappened = 0;
+            accumulator = 0;
+            gameRunning = true;
+            mainGrid = Grid.clearFlags(mainGrid);
+            mainGrid = Grid.populateFlags(mainGrid);
+            // The following statements activate the correct number of enemies for the map, putting them 
+            // in spawn locations marked in the hitbox.rxhb file.
+            enemyCount = (int)mainGrid.enemyCount;
+            if (enemyCount > 0)
+            {
+
+                e0 = AI.setLocation(e0, (ushort)mainGrid.enemystart[0][0], (ushort)mainGrid.enemystart[0][1]);
+                e0 = AI.activate(e0);
+            }
+
+            if (enemyCount > 1)
+            {
+                e1 = AI.setLocation(e1, (ushort)mainGrid.enemystart[1][0], (ushort)mainGrid.enemystart[1][1]);
+                e1 = AI.activate(e1);
+            }
+
+            if (enemyCount > 2)
+            {
+                e2 = AI.setLocation(e2, (ushort)mainGrid.enemystart[2][0], (ushort)mainGrid.enemystart[2][1]);
+                e2 = AI.activate(e2);
+            }
+
+            if (enemyCount > 3)
+            {
+                e3 = AI.setLocation(e3, (ushort)mainGrid.enemystart[3][0], (ushort)mainGrid.enemystart[3][1]);
+                e3 = AI.activate(e3);
+            }
 
         }
 
