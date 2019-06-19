@@ -60,6 +60,7 @@ namespace RallyXtreme
                 Console.WriteLine($"#GRID# Flag collected at x{player.gridX}, y{player.gridY}");
                 grid = Entity.deactivateEntity((ushort)player.gridX, (ushort)player.gridY, grid);
                 Game1.sfx[1].CreateInstance().Play();
+                player.fuel += 1;
             }
 
             if (Grid.returnEntityType(player.gridX, player.gridY, grid) == 'b')

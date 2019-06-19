@@ -46,21 +46,23 @@ namespace RallyXtreme
         float carSpeed;
         SpriteFont font;
         SpriteFont cdFont;
-        int score = 0;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         public int tickLimit = 10000000;
         double accumulator = 0f;
         ushort nextDirection = 4;
-        double tickTime = 1f;
+        double tickTime = 0.25f;
         int uiPixelOffset = 300;
         int xRes = CacheLoad.getResolutionX();
         int yRes = CacheLoad.getResolutionY();
         bool explode = false;
         bool playMusic = true;
+        bool muteNextFrame = false;
         bool isPaused;
+        bool pauseNextFrame;
         enemyChar e0, e1, e2, e3;
         int explosionHappened;
+        bool gameRunning = true;
 
         public Game1()
         {
@@ -208,17 +210,7 @@ namespace RallyXtreme
             // Mute button
             if (kstate.IsKeyDown(Keys.M))
             {
-                if (playMusic == true)
-                {
-                    playMusic = false;
-                    MediaPlayer.IsMuted = false;
-                }
-                else if (playMusic == false)
-                {
-                    playMusic = true;
-                    MediaPlayer.IsMuted = true;
-                }
-
+                muteNextFrame = true;
             }
 
             // Suicide key
@@ -233,11 +225,17 @@ namespace RallyXtreme
                 if (isPaused == true)
                     isPaused = false;
                 else if (isPaused == false)
-                    isPaused = true;
+                    pauseNextFrame = true;
             }
 
-            if (gameTimer > 0)
+            if (gameTimer > 0 && gameRunning == true)
             {
+                // Checking if all flags are collected ot end game 
+                if (Entity.flagsRemaining(mainGrid) <= 0)
+                    gameRunning = false;
+
+
+
                 // Detecting the player's desired movement
                 if (kstate.IsKeyDown(Keys.W) || kstate.IsKeyDown(Keys.Up))
                 {
@@ -276,8 +274,23 @@ namespace RallyXtreme
                         if (Player.checkEnemyPos(player0, e0, e1, e2, e3) == false)
                             player0 = Player.kill(player0);
 
+                        if (pauseNextFrame == true)
+                            isPaused = true;
+                        if (muteNextFrame == true)
+                            if (playMusic == true)
+                            {
+                                MediaPlayer.IsMuted = true;
+                                playMusic = false;
+                            }
+                                
+                            else if (playMusic == false)
+                            {
+                                MediaPlayer.IsMuted = false;
+                                playMusic = true;
+                            }
+                                
+
                         nextDirection = player0.direction;
-                        score++;
                         Console.WriteLine($"#GAME# Movement tick -> Player = ({player0.gridX},{player0.gridY})");
 
                     }
@@ -296,6 +309,12 @@ namespace RallyXtreme
 
                     accumulator = 0;
                 }
+
+                
+
+
+
+
                 carRotation = Player.reportRotation(player0);
                 carPosition = player0.pos;
 
@@ -310,11 +329,25 @@ namespace RallyXtreme
                 //    S
             }
 
+            if (gameRunning == false)
+            {
+                MediaPlayer.IsMuted = true;
+                if (player0.fuel > 0 && accumulator > 0.2f)
+                {
+                    player0.fuel -= 1;
+                    player0.score += 10;
+                    accumulator = 0;
+                    Console.WriteLine("#GAME OVER# -> converting fuel to score!");
+                    sfx[1].Play();
+                    
+                }
+
+            }
 
             if (isPaused == false)
             {
                 accumulator += (double)gameTime.ElapsedGameTime.TotalSeconds;
-                if (player0.alive == true)
+                if (player0.alive == true && gameRunning == true)
                     gameTimer += (double)gameTime.ElapsedGameTime.TotalSeconds;
             }
             
@@ -400,7 +433,13 @@ namespace RallyXtreme
 
             // ### ENEMY DRAW ###
             if (e0.active == true && gameTimer > 0)
-                spriteBatch.Draw(enemyCar, e0.pos, new Rectangle(0, 0, 70, 70), Color.White, ((float)Math.PI * (float)e0.direction), new Vector2(35, 35), 1.0f, SpriteEffects.None, 1);
+                spriteBatch.Draw(enemyCar, e0.pos, new Rectangle(0, 0, 70, 70), Color.White, AI.reportRotationAI(e0), new Vector2(35, 35), 1.0f, SpriteEffects.None, 1);
+            if (e1.active == true && gameTimer > 0)
+                spriteBatch.Draw(enemyCar, e1.pos, new Rectangle(0, 0, 70, 70), Color.White, AI.reportRotationAI(e1), new Vector2(35, 35), 1.0f, SpriteEffects.None, 1);
+            if (e2.active == true && gameTimer > 0)
+                spriteBatch.Draw(enemyCar, e2.pos, new Rectangle(0, 0, 70, 70), Color.White, AI.reportRotationAI(e2), new Vector2(35, 35), 1.0f, SpriteEffects.None, 1);
+            if (e3.active == true && gameTimer > 0)
+                spriteBatch.Draw(enemyCar, e3.pos, new Rectangle(0, 0, 70, 70), Color.White, AI.reportRotationAI(e3), new Vector2(35, 35), 1.0f, SpriteEffects.None, 1);
 
             // ### PLAYER DRAW ###
             if (player0.alive == true && gameTimer > 0)
@@ -448,6 +487,12 @@ namespace RallyXtreme
             base.Draw(gameTime);
             // like update method, but for graphics only
         }
+
+        public static void resetGame(gamegrid g, playerChar p, enemyChar e0, enemyChar e1, enemyChar e2, enemyChar e3)
+        {
+
+        }
+
 
         
     }

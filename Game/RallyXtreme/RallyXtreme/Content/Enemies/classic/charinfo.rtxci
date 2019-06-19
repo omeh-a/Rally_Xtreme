@@ -1,8 +1,5 @@
-#name(string)#
-ClassicEnemies
-#speedvalue(%)#
-100
-#xySize(pixels)#
+randyRandom
+1
 70
-#ability(int)#
 0
+1

@@ -41,5 +41,27 @@ namespace RallyXtreme
             grid.entities[y][x].active = false;
             return grid;
         }
+
+        public static uint flagsRemaining(gamegrid g)
+        {
+            uint count = 0;
+            int i = 0;
+            while (i < g.ySize)
+            {
+                int e = 0;
+                while (e < g.xSize)
+                {
+                    if (g.entities[i][e].type == 'f' && g.entities[i][e].active == true)
+                    {
+                        count++;
+                    }
+                    e++;
+                }
+                i++;
+            }
+            Console.WriteLine($"#ENTITY# Found {count} flags remaining");
+
+            return count;
+        }
     }
 }

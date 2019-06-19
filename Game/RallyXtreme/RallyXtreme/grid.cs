@@ -8,6 +8,13 @@ using System.IO;
 
 namespace RallyXtreme
 {
+    public struct node
+    {
+        public int sector;
+        public int x;
+        public int y;
+    }
+
     public struct gamegrid
     {
         public char[][] collisions;
@@ -23,7 +30,10 @@ namespace RallyXtreme
         public byte[] roadColour;
         public byte[] wallColour;
         public byte[] borderColour;
+        public node[] nodeList;
     }
+
+    
 
 
 
@@ -114,8 +124,12 @@ namespace RallyXtreme
             string directory = mapDirectory;
             // note that mapDirectory is called from Game1.cs
 
+
+            newGrid.nodeList = new node[4];
+
             Console.WriteLine($"#GRID# Preparing to generate from {directory}...");
 
+            
 
             string line;
             int i = 0;
@@ -256,6 +270,8 @@ namespace RallyXtreme
             i = 0;
             int o = 0;
             int e = 0;
+            int nodeCount = 0;
+            newGrid.enemystart = new int[10][];
             try
             {
                 using (StreamReader r = new StreamReader(directory + "/hitbox.rxhb"))
@@ -276,11 +292,34 @@ namespace RallyXtreme
                             }
                             if (line[o] == 'e')
                             {
-                                newGrid.enemystart = new int[10][];
                                 newGrid.enemystart[e] = new int[2];
                                 newGrid.enemystart[e][0] = o;
                                 newGrid.enemystart[e][1] = i;
                                 System.Console.WriteLine($"#GRID# enemy #{e} start @{o},{i}");
+                                e++;
+                            }
+                            if (line[o] == 'n')
+                            {
+                                newGrid.nodeList[nodeCount] = new node();
+                                newGrid.nodeList[nodeCount].x = o;
+                                newGrid.nodeList[nodeCount].y = i;
+
+                                if (o <= (newGrid.xSize / 2) && i <= (newGrid.ySize / 2))
+                                {
+                                    newGrid.nodeList[nodeCount].sector = 1;
+                                }
+                                else if (0 >= (newGrid.xSize / 2) && i <= (newGrid.ySize / 2))
+                                {
+                                    newGrid.nodeList[nodeCount].sector = 2;
+                                }
+                                else if (o <= (newGrid.xSize / 2) && i >= (newGrid.ySize / 2))
+                                {
+                                    newGrid.nodeList[nodeCount].sector = 3;
+                                }
+                                else
+                                {
+                                    newGrid.nodeList[nodeCount].sector = 4;
+                                }
                             }
                             o++;
                         }

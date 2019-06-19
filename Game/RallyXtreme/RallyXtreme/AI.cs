@@ -34,9 +34,173 @@ namespace RallyXtreme
     {
         public static enemyChar updatePos(enemyChar e, playerChar p, gamegrid g)
         {
-           
+            if (e.searchMode == 1)
+            {
+                e = pathFindRandom(e, g);
+            } else if (e.searchMode == 2)
+            {
+                e = pathFindSectorial(e, p, g);
+            }
             return e;
         }
+
+        public static enemyChar pathFindRandom(enemyChar e, gamegrid g)
+        {
+            // This is called when enemy type == 1
+            // The AI will randomly wander through the map
+
+            Random rn = new Random();
+
+            if (e.direction == 4)
+                e.direction = (ushort)rn.Next(0, 3);
+            if (checkDirAI(0, e, g) != '0' && checkDirAI(0, e, g) != '$' && e.direction != 0 && rn.Next(0,7) == 2)
+            {
+                e.direction = 0;
+            }
+            if (checkDirAI(2, e, g) != '0' && checkDirAI(2, e, g) != '$' && e.direction != 2 && rn.Next(0, 7) == 2)
+            {
+                e.direction = 2;
+            }
+            if (checkDirAI(1, e, g) != '0' && checkDirAI(1, e, g) != '$' && e.direction != 1 && rn.Next(0, 7) == 1)
+            {
+                e.direction = 2;
+            }
+
+
+            if (checkDirAI(e.direction, e, g) != '$' && checkDirAI(e.direction, e, g) != '0')
+                e = stepFowardAI(e.direction, e, g);
+            else
+            {
+                e = stepForwardAutoAI(e.direction, e, g);
+            }
+                
+                
+            return e;
+        }
+
+        public static enemyChar pathFindSectorial(enemyChar e, playerChar p, gamegrid g)
+        {
+
+
+            return e;
+        }
+
+        public static float reportRotationAI(enemyChar e)
+        {
+            // this function converts the integer direction into radians and returns it
+            float rtn = 0f;
+            if (e.direction == 0)
+                rtn = 0f;
+            else if (e.direction == 1)
+                rtn = (float)Math.PI / 2f;
+            else if (e.direction == 2)
+                rtn = (float)Math.PI;
+            else if (e.direction == 3)
+                rtn = (float)Math.PI + ((float)Math.PI / 2f);
+            return rtn;
+        }
+
+        public static char checkDirAI(ushort direction, enemyChar e, gamegrid grid)
+        {
+            // This function returns the contents of a square in a direction relative to e
+
+            //Console.WriteLine($"#e# Checking dir{direction}");
+            char contents = ' ';
+            if (direction == 0)
+            {
+                contents = grid.collisions[e.gridY - 1][e.gridX];
+            }
+            else if (direction == 1)
+            {
+                contents = grid.collisions[e.gridY][e.gridX + 1];
+            }
+            else if (direction == 2)
+            {
+                contents = grid.collisions[e.gridY + 1][e.gridX];
+            }
+            else if (direction == 3)
+            {
+                contents = grid.collisions[e.gridY][e.gridX - 1];
+            }
+            else
+            {
+                contents = 'x';
+                Console.WriteLine($"#e# checkDirAI was given an invalid direction -> {direction}");
+            }
+            return contents;
+        }
+
+        public static enemyChar stepForwardAutoAI (ushort failedDirection, enemyChar e, gamegrid grid)
+        {
+            /* This function is responsible for reorienting the enemy if they try make
+             * an invalid turn. It will try and put the enemy back on the path they were
+             * last on, or else try and find a suitable direction
+             * 
+             */
+            ushort dir = 4;
+
+
+            if (failedDirection == 0)
+            {
+                if (checkDirAI(1, e, grid) != '$' && checkDirAI(1, e, grid) != '0')
+                {
+                    dir = 1;
+                }
+                else if (checkDirAI(3, e, grid) != '$' && checkDirAI(3, e, grid) != '0')
+                {
+                    dir = 3;
+                }
+                else
+                    dir = 2;
+            }
+            else if (failedDirection == 1)
+            {
+                if (checkDirAI(0, e, grid) != '$' && checkDirAI(0, e, grid) != '0')
+                {
+                    dir = 0;
+                }
+                else if (checkDirAI(2, e, grid) != '$' && checkDirAI(2, e, grid) != '0')
+                {
+                    dir = 2;
+                }
+                else
+                  dir = 3;
+            }
+            else if (failedDirection == 2)
+            {
+                if (checkDirAI(1, e, grid) != '$' && checkDirAI(1, e, grid) != '0')
+                {
+                    dir = 1;
+                }
+                else if (checkDirAI(3, e, grid) != '$' && checkDirAI(3, e, grid) != '0')
+                {
+                    dir = 3;
+                }
+                else
+                  dir = 0;
+            }
+            else if (failedDirection == 3)
+            {
+                if (checkDirAI(0, e, grid) != '$' && checkDirAI(0, e, grid) != '0')
+                {
+                    dir = 0;
+                }
+                else if (checkDirAI(2, e, grid) != '$' && checkDirAI(2, e, grid) != '0')
+                {
+                    dir = 2;
+                }
+                else
+                  dir = 1;
+            }
+            //}
+            e = stepFowardAI(dir, e, grid);
+            //e.prevDirection = dir;
+
+
+            return e;
+        }
+
+  
         
         public static float distanceToPlayer(enemyChar e, playerChar p, gamegrid g)
         {
@@ -64,7 +228,7 @@ namespace RallyXtreme
         }
 
 
-        public static enemyChar stepFoward(ushort direction, enemyChar e, gamegrid g)
+        public static enemyChar stepFowardAI(ushort direction, enemyChar e, gamegrid g)
         {
             if (direction == 1 && e.gridX < 14)
             {
@@ -91,7 +255,7 @@ namespace RallyXtreme
             e.pos = new Vector2(((e.gridX * e.gridPixelSize) + e.gridPixelSize / 2),
                 ((e.gridY * e.gridPixelSize)) + e.gridPixelSize / 2);
 
-
+            
 
             return e;
         }
@@ -141,6 +305,7 @@ namespace RallyXtreme
             string speedValue = "";
             string xySize = "";
             string ability = "";
+            string typeString = "";
             // these variables must be parsed to ints, as you can only read
             // strings or chars from a text file.
 
@@ -170,6 +335,10 @@ namespace RallyXtreme
                             {
                                 ability = line;
                             }
+                            if (i == 5)
+                            {
+                                typeString = line;
+                            }
                             // System.Console.WriteLine(line);
                         }
 
@@ -184,7 +353,7 @@ namespace RallyXtreme
 
             // The following loop attempts to convert the retrieved strings into ints
             i = 0;
-            while (i < 3)
+            while (i <= 4)
             {
                 try
                 {
@@ -194,20 +363,18 @@ namespace RallyXtreme
                         newEnemy.pixelXY = Int32.Parse(xySize);
                     else if (i == 3)
                         newEnemy.ability = Int32.Parse(ability);
+                    else if (i == 4)
+                        newEnemy.searchMode = (ushort)Int32.Parse(typeString);
                 }
-                catch (FormatException)
+                catch (FormatException er)
                 {
-                    if (i == 1)
-                        Console.WriteLine($"Unable to parse '{speedValue}'");
-                    else if (i == 2)
-                        Console.WriteLine($"Unable to parse '{xySize}'");
-                    else if (i == 3)
-                        Console.WriteLine($"Unable to parse '{ability}'");
+                    Console.WriteLine("#AI# Parse error ->" + er);
                 }
                 i++;
             }
 
-            newEnemy.modelDirectory = $"{directory}";
+            System.Console.WriteLine($"#ENEMY# Found Navigation type as {newEnemy.searchMode}");
+
 
             System.Console.WriteLine($"#ENEMY# Read complete");
 
