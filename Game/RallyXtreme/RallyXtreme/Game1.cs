@@ -59,7 +59,6 @@ namespace RallyXtreme
         int yRes = CacheLoad.getResolutionY();
         bool explode = false;
         bool playMusic = true;
-        bool muteNextFrame = false;
         bool isPaused;
         bool pauseNextFrame;
         enemyChar e0, e1, e2, e3;
@@ -213,9 +212,10 @@ namespace RallyXtreme
 
             // Mute button
             if (kstate.IsKeyDown(Keys.M))
-            {
-                muteNextFrame = true;
-            }
+                MediaPlayer.IsMuted = true;
+            if (kstate.IsKeyDown(Keys.N))
+                MediaPlayer.IsMuted = false;
+            
 
             // Suicide key
             if (kstate.IsKeyDown(Keys.K))
@@ -280,18 +280,6 @@ namespace RallyXtreme
 
                         if (pauseNextFrame == true)
                             isPaused = true;
-                        if (muteNextFrame == true)
-                            if (playMusic == true)
-                            {
-                                MediaPlayer.IsMuted = true;
-                                playMusic = false;
-                            }
-                                
-                            else if (playMusic == false)
-                            {
-                                MediaPlayer.IsMuted = false;
-                                playMusic = true;
-                            }
                                 
 
                         nextDirection = player0.direction;
@@ -479,7 +467,7 @@ namespace RallyXtreme
             spriteBatch.Draw(fuelBar, new Vector2((float)xRes, 200f), new Rectangle(0, 0, 3*((int)player0.fuel), 70), Color.White);
 
             // Keys display
-            spriteBatch.DrawString(font, $"       Mute = 'm'", new Vector2(((float)xRes + uiPixelOffset / 4), 300), Color.White);
+            spriteBatch.DrawString(font, $"Mute = 'm' unmute = n", new Vector2(((float)xRes + uiPixelOffset / 4), 300), Color.White);
             spriteBatch.DrawString(font, $"Kill player = 'k'", new Vector2(((float)xRes + uiPixelOffset / 4), 320), Color.White);
 
             // Count in
