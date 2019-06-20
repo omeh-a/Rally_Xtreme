@@ -11,7 +11,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
@@ -21,23 +20,10 @@ using System.IO;
 namespace RallyXtreme_launcher
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Launcher for RallyXtreme
     /// </summary>
     /// 
     
-
-
-
-
-    public struct prefs
-    {
-        public string mapDirectory;
-        public string playerDirectory;
-        public string aiDirectory;
-        public int difficulty;
-    }
-
-
     public struct description
     {
         public char type;
@@ -57,27 +43,27 @@ namespace RallyXtreme_launcher
         public static description[] maps;
         public static description[] players;
         public static description[] enemies;
+        public static int selectedMap;
+        public static int selectedenemy;
+        public static int selectedplayer;
+        public static short difficulty;
         public MainWindow()
         {
             InitializeComponent();
-            enemyDesc = Retrieval.getEnemies();
-            mapRetrieval.getMaps();
-            Retrieval.getPlayers();
-            PlayerDescBox.Text = playerDesc.typeDesc[0] + playerDesc.typeDesc[1];
-            EnemyDescBox.Text = enemyDesc.typeDesc[0] + enemyDesc.typeDesc[1];
+            enemies = Retrieval.getEnemies();
+            maps = Retrieval.getMaps();
+            players = Retrieval.getPlayers();
+            selectedenemy = 0;
+            selectedMap = 0;
+            selectedplayer = 0;
+            playerDesc = players[0];
+            mapDesc = maps[0];
+            enemyDesc = enemies[0];
+            PlayerDescBox.Text = playerDesc.typeDesc[0] + "\n" +  playerDesc.typeDesc[1];
+            EnemyDescBox.Text = enemyDesc.typeDesc[0] + "\n" + enemyDesc.typeDesc[1];
+            MapDescBox.Text = mapDesc.typeDesc[0] + "\n" + mapDesc.typeDesc[1];
         }
 
-        public class Map
-            {
-            public string name;
-            public string imgPath;
-            public ushort gridX;
-            public ushort gridY;
-            public string hitboxPath;
-            public uint enemyNumber;
-            public ushort difficulty;
-
-            }
 
         public bool mapCacheWrite()
         {
@@ -85,10 +71,19 @@ namespace RallyXtreme_launcher
             string directory = System.IO.Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
             try
             {
-                using (StreamWriter w = new StreamWriter(directory))
+                using (StreamWriter w = new StreamWriter(directory + "\\cache.rxtcache"))
                 {
-
+                    w.WriteLine($"{mapDesc.directory}");
+                    w.WriteLine($"{playerDesc.directory}");
+                    w.WriteLine($"{enemyDesc.directory}");
+                    w.WriteLine($"{difficulty}");
+                    w.WriteLine($"1120");
+                    w.WriteLine($"1050");
                 }
+                Console.WriteLine($"#cachewrite# map = {mapDesc.directory} #{selectedMap}");
+                Console.WriteLine($"#cachewrite# player = {playerDesc.directory} #{selectedplayer}");
+                Console.WriteLine($"#cachewrite# enemy  = {enemyDesc.directory} #{selectedenemy}");
+                Console.WriteLine($"#cachewrite# difficulty = {difficulty}");
             }
             catch (Exception er)
             {
@@ -101,12 +96,13 @@ namespace RallyXtreme_launcher
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-                
+            mapCacheWrite();
+            string dir = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\rallyXtreme.exe";
+            Console.WriteLine($"#LAUNCHER# Launching -> {dir}");
             Process newGame = new Process();
-            newGame.StartInfo.FileName = getDirectory.getExecutable();
+            newGame.StartInfo.FileName = dir;
             newGame.EnableRaisingEvents = true;
             newGame.Start();
-            Close();
 
         }
 
@@ -116,42 +112,72 @@ namespace RallyXtreme_launcher
 
         private void mapButtonPlus_Click(object sender, RoutedEventArgs e)
         {
-
+            if (selectedMap >= 0 && selectedMap < Retrieval.mapNum -1)
+            {
+                selectedMap += 1;
+            }
+            mapDesc = maps[selectedMap];
         }
 
         private void mapButtonMinus_Click(object sender, RoutedEventArgs e)
         {
-            
+            if (selectedMap > 0 && selectedMap <= Retrieval.mapNum - 1)
+            {
+                selectedMap -= 1;
+            }
+            mapDesc = maps[selectedMap];
         }
 
         private void pButtonPlus_Click(object sender, RoutedEventArgs e)
         {
-            Retrieval.selectPlayer(1);
+            if (selectedplayer >= 0 && selectedplayer < Retrieval.playerNum - 1)
+            {
+                selectedplayer += 1;
+            }
+            playerDesc = players[selectedplayer];
         }
 
         private void pButtonMinus_Click(object sender, RoutedEventArgs e)
         {
-            Retrieval.selectPlayer(-1);
+            if (selectedplayer > 0 && selectedplayer <= Retrieval.playerNum - 1)
+            {
+                selectedplayer -= 1;
+            }
+            playerDesc = players[selectedplayer];
         }
 
         private void aiButtonPlus_Click(object sender, RoutedEventArgs e)
         {
-            Retrieval.selectEnemy(1);
+            if (selectedenemy >= 0 && selectedenemy < Retrieval.enemyNum - 1)
+            {
+                selectedenemy += 1;
+            }
+            enemyDesc = enemies[selectedplayer];
         }
 
         private void aiButtonMinus_Click(object sender, RoutedEventArgs e)
         {
-            Retrieval.selectEnemy(-1);
+            if (selectedenemy >= 0 && selectedenemy < Retrieval.enemyNum - 1)
+            {
+                selectedenemy += 1;
+            }
+            enemyDesc = enemies[selectedplayer];
         }
 
         private void dButtonPlus_Click(object sender, RoutedEventArgs e)
         {
-
+            if (difficulty < 4)
+            {
+                difficulty++;
+            }
         }
 
         private void dButtonMinus_Click(object sender, RoutedEventArgs e)
         {
-
+            if (difficulty > 0)
+            {
+                difficulty--;
+            }
         }
     }
 }

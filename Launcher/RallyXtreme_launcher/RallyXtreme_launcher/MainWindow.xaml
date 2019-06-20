@@ -20,8 +20,10 @@
                     <Rectangle Height="85" Margin="300,0,140,0" Fill="LightGray"/>
                     <Image Height="70" Margin="312,0,149.333,0" Source="goodcar70x70mk1.png" Stretch="Fill"/>
                 </Grid>
-                <TextBox x:Name="PlayerDescBox" Background="LightGray" Height="100" Margin="220, 20, 50, 0" Text=""/>
-             
+                <TextBlock x:Name="PlayerDescBox" Background="LightGray" Height="100" Margin="220, 20, 50, 0" Text=""/>
+                <TextBlock Height="35" Margin ="300,20,135,0" Text="Level" FontSize=" 30" FontWeight="Bold" FontFamily="Arial" RenderTransformOrigin="0.5,-0.314"/>
+                <TextBlock x:Name="MapDescBox" Background="LightGray" Height="100" Margin="220, 0, 50, 0" Text=""/>
+
             </StackPanel>
 
 
@@ -78,7 +80,7 @@
 
 
                 
-                <Button x:Name="LaunchButton" Content="Launch Rally-Xtreme" Grid.Column="1"  Background="DarkOrange" Margin="5" FontWeight="Black" FontSize="20"/>
+                <Button x:Name="LaunchButton" Content="Launch Rally-Xtreme" Grid.Column="1"  Background="DarkOrange" Margin="5" FontWeight="Black" FontSize="20" Click="StartButton_Click"/>
 
                 
             </StackPanel>
@@ -88,7 +90,7 @@
                     <Rectangle Height="85" Margin="135,0,300,0" Fill="LightGray"/>
                     <Image Height="70" Margin="149.3333,0,312,0" Source="enemy.png" Stretch="Fill"/>
                 </Grid>
-                <TextBox x:Name="EnemyDescBox" Background="LightGray" Height="100" Margin="50, 20, 220, 0" Text=""/>
+                <TextBlock x:Name="EnemyDescBox" Background="LightGray" Height="100" Margin="50, 20, 215, 0" Text="" />
             </StackPanel>
 
 

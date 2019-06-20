@@ -11,13 +11,9 @@ namespace RallyXtreme_launcher
 {
     public class Retrieval
     {
-        public static description playerDesc;
-        public static description enemyDesc;
-        public static description mapDesc;
-        public static description[] maps;
-        public static description[] players;
-        public static description[] enemies;
-
+        public static int mapNum = 0;
+        public static int playerNum = 0;
+        public static int enemyNum = 0;
 
         public static void selectPlayer(int direction)
         {
@@ -32,17 +28,20 @@ namespace RallyXtreme_launcher
         {
             description[] found = new description[255];
             string directory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-            Console.WriteLine($"#FILE SEARCH# Attempting to read cache from {directory}");
+            Console.WriteLine($"#FILE SEARCH# Attempting to read maps from {directory}\\Content\\Maps");
 
             string[] directories = Directory.GetDirectories($"{directory}\\Content\\Maps");
             int i = 0;
 
-            while (i > directories.Length)
+            while (i < directories.Length)
             {
                 found[i].type = 'm';
                 found[i].directory = directories[i];
                 found[i].typeDesc = getDesc(directories[i]);
+                Console.WriteLine($"#FILE SEARCH# Found {found[i].directory}");
                 i++;
+                mapNum++;
+                
             }
 
 
@@ -57,12 +56,13 @@ namespace RallyXtreme_launcher
             string[] directories = Directory.GetDirectories($"{directory}\\Content\\Characters");
             int i = 0;
 
-            while (i > directories.Length)
+            while (i < directories.Length)
             {
                 found[i].type = 'p';
                 found[i].directory = directories[i];
                 found[i].typeDesc = getDesc(directories[i]);
                 i++;
+                playerNum++;
             }
 
 
@@ -76,15 +76,16 @@ namespace RallyXtreme_launcher
             string directory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
             Console.WriteLine($"#FILE SEARCH# Attempting to read cache from {directory}");
 
-            string[] directories = Directory.GetDirectories($"{directory}\\Content\\Maps");
+            string[] directories = Directory.GetDirectories($"{directory}\\Content\\Enemies");
             int i = 0;
 
-            while (i > directories.Length)
+            while (i < directories.Length)
             {
                 found[i].type = 'm';
                 found[i].directory = directories[i];
                 found[i].typeDesc = getDesc(directories[i]);
                 i++;
+                enemyNum++;
             }
 
 
@@ -92,12 +93,12 @@ namespace RallyXtreme_launcher
 
             return found;
         }
-        private static string[] getDesc(string directory)
+        public static string[] getDesc(string directory)
         {
             string[] result = new string[2];
-            
 
 
+            directory = directory + "\\description.txt";
             string line;
             int i = 0;
 
@@ -119,6 +120,7 @@ namespace RallyXtreme_launcher
                         {
                             result[1] = line;
                         }
+                        Console.WriteLine($"#GETDESC# read: {line}");
                     }
                 }
             }
