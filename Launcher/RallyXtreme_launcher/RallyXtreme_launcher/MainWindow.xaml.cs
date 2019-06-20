@@ -16,6 +16,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Diagnostics;
+using System.IO;
 
 namespace RallyXtreme_launcher
 {
@@ -23,6 +24,11 @@ namespace RallyXtreme_launcher
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     /// 
+    
+
+
+
+
     public struct prefs
     {
         public string mapDirectory;
@@ -32,12 +38,33 @@ namespace RallyXtreme_launcher
     }
 
 
+    public struct description
+    {
+        public char type;
+        public string[] typeDesc;
+        public string directory;
+    }
+
+    
+
+
 
     public partial class MainWindow : Window
     {
+        public static description playerDesc;
+        public static description enemyDesc;
+        public static description mapDesc;
+        public static description[] maps;
+        public static description[] players;
+        public static description[] enemies;
         public MainWindow()
         {
             InitializeComponent();
+            enemyDesc = Retrieval.getEnemies();
+            mapRetrieval.getMaps();
+            Retrieval.getPlayers();
+            PlayerDescBox.Text = playerDesc.typeDesc[0] + playerDesc.typeDesc[1];
+            EnemyDescBox.Text = enemyDesc.typeDesc[0] + enemyDesc.typeDesc[1];
         }
 
         public class Map
@@ -83,12 +110,46 @@ namespace RallyXtreme_launcher
 
         }
 
-        private void AIMenu_Click(object sender, RoutedEventArgs e)
+
+
+       
+
+        private void mapButtonPlus_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void ControlsButton_Click(object sender, RoutedEventArgs e)
+        private void mapButtonMinus_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void pButtonPlus_Click(object sender, RoutedEventArgs e)
+        {
+            Retrieval.selectPlayer(1);
+        }
+
+        private void pButtonMinus_Click(object sender, RoutedEventArgs e)
+        {
+            Retrieval.selectPlayer(-1);
+        }
+
+        private void aiButtonPlus_Click(object sender, RoutedEventArgs e)
+        {
+            Retrieval.selectEnemy(1);
+        }
+
+        private void aiButtonMinus_Click(object sender, RoutedEventArgs e)
+        {
+            Retrieval.selectEnemy(-1);
+        }
+
+        private void dButtonPlus_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void dButtonMinus_Click(object sender, RoutedEventArgs e)
         {
 
         }

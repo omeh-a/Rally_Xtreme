@@ -57,6 +57,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Retrieval.cs" />
     <Page Include="ControlsMenu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -115,6 +116,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Mockup main menu.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="goodcar70x70mk1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="enemy.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

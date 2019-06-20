@@ -167,9 +167,6 @@ namespace RallyXtreme
 
         private static string getLocation()
         {
-            // MAKE THIS BETTER
-
-
             string location;
             string folder = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
             string filter = "*.rxtcache";

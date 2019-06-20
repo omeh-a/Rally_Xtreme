@@ -14,6 +14,17 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Margin ="0, 300, 0, 0">
+                <TextBlock Height="35" Margin ="300,0,135,0" Text="Player" FontSize=" 30" FontWeight="Bold" FontFamily="Arial"/>
+                <Grid>
+                    <Rectangle Height="85" Margin="300,0,140,0" Fill="LightGray"/>
+                    <Image Height="70" Margin="312,0,149.333,0" Source="goodcar70x70mk1.png" Stretch="Fill"/>
+                </Grid>
+                <TextBox x:Name="PlayerDescBox" Background="LightGray" Height="100" Margin="220, 20, 50, 0" Text=""/>
+             
+            </StackPanel>
+
+
             <StackPanel Grid.Column="1" Margin="0,300,0,0">
 
                 <Grid Margin="5">
@@ -23,10 +34,10 @@
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button x:Name="mapButtonPlus" Content="+" Grid.Column="2"/>
+                    <Button x:Name="mapButtonPlus" Content="+" Grid.Column="2" Click="mapButtonPlus_Click"/>
                     <Rectangle Fill="LightGray" Grid.Column="1"/>
                     <TextBlock Text="Map" Grid.Column="1" Background ="Transparent" HorizontalAlignment="Center" FontSize="18"/>
-                    <Button x:Name="mapButtonMinus" Content="-" Grid.Column="0" />
+                    <Button x:Name="mapButtonMinus" Content="-" Grid.Column="0" Click="mapButtonMinus_Click"/>
                 </Grid>
                 <Grid Margin="5">
                     <Grid.ColumnDefinitions>
@@ -35,10 +46,10 @@
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button x:Name="pButtonPlus" Content="+" Grid.Column="2"/>
+                    <Button x:Name="pButtonPlus" Content="+" Grid.Column="2" Click="pButtonPlus_Click"/>
                     <Rectangle Fill="LightGray" Grid.Column="1"/>
                     <TextBlock Text="Player" Grid.Column="1" Background ="Transparent" HorizontalAlignment="Center" FontSize="18"/>
-                    <Button x:Name="pButtonMinus" Content="-" Grid.Column="0" />
+                    <Button x:Name="pButtonMinus" Content="-" Grid.Column="0" Click="pButtonMinus_Click"/>
                 </Grid>
                 <Grid Margin="5">
                     <Grid.ColumnDefinitions>
@@ -47,10 +58,10 @@
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button x:Name="aiButtonPlus" Content="+" Grid.Column="2"/>
+                    <Button x:Name="aiButtonPlus" Content="+" Grid.Column="2" Click="aiButtonPlus_Click"/>
                     <Rectangle Fill="LightGray" Grid.Column="1"/>
                     <TextBlock Text="Enemy" Grid.Column="1" Background ="Transparent" HorizontalAlignment="Center" FontSize="18"/>
-                    <Button x:Name="aiButtonMinus" Content="-" Grid.Column="0" />
+                    <Button x:Name="aiButtonMinus" Content="-" Grid.Column="0" Click="aiButtonMinus_Click"/>
                 </Grid>
                 <Grid Margin="5">
                     <Grid.ColumnDefinitions>
@@ -59,13 +70,25 @@
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button x:Name="dButtonPlus" Content="+" Grid.Column="2"/>
+                    <Button x:Name="dButtonPlus" Content="+" Grid.Column="2" Click="dButtonPlus_Click"/>
                     <Rectangle Fill="LightGray" Grid.Column="1"/>
                     <TextBlock Text="Difficulty" Grid.Column="1" Background ="Transparent" HorizontalAlignment="Center" FontSize="18"/>
-                    <Button x:Name="dButtonMinus" Content="-" Grid.Column="0" />
+                    <Button x:Name="dButtonMinus" Content="-" Grid.Column="0" Click="dButtonMinus_Click"/>
                 </Grid>
 
+
+                
                 <Button x:Name="LaunchButton" Content="Launch Rally-Xtreme" Grid.Column="1"  Background="DarkOrange" Margin="5" FontWeight="Black" FontSize="20"/>
+
+                
+            </StackPanel>
+            <StackPanel Grid.Column="2" Margin ="0, 300, 0, 0">
+                <TextBlock Height="35" Margin ="135,0,290,0" Text="Enemy" FontSize=" 30" FontWeight="Bold" FontFamily="Arial"/>
+                <Grid>
+                    <Rectangle Height="85" Margin="135,0,300,0" Fill="LightGray"/>
+                    <Image Height="70" Margin="149.3333,0,312,0" Source="enemy.png" Stretch="Fill"/>
+                </Grid>
+                <TextBox x:Name="EnemyDescBox" Background="LightGray" Height="100" Margin="50, 20, 220, 0" Text=""/>
             </StackPanel>
 
 
