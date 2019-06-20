@@ -62,6 +62,7 @@ namespace RallyXtreme_launcher
             PlayerDescBox.Text = playerDesc.typeDesc[0] + "\n" +  playerDesc.typeDesc[1];
             EnemyDescBox.Text = enemyDesc.typeDesc[0] + "\n" + enemyDesc.typeDesc[1];
             MapDescBox.Text = mapDesc.typeDesc[0] + "\n" + mapDesc.typeDesc[1];
+            dLabel.Text = $"Difficulty = '{difficulty}'";
         }
 
 
@@ -170,6 +171,7 @@ namespace RallyXtreme_launcher
             {
                 difficulty++;
             }
+            dLabel.Text = $"Difficulty = '{difficulty}'";
         }
 
         private void dButtonMinus_Click(object sender, RoutedEventArgs e)
@@ -178,6 +180,7 @@ namespace RallyXtreme_launcher
             {
                 difficulty--;
             }
+            dLabel.Text = $"Difficulty = '{difficulty}'";
         }
     }
 }

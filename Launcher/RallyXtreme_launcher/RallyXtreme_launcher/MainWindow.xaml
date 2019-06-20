@@ -74,7 +74,7 @@
 
                     <Button x:Name="dButtonPlus" Content="+" Grid.Column="2" Click="dButtonPlus_Click"/>
                     <Rectangle Fill="LightGray" Grid.Column="1"/>
-                    <TextBlock Text="Difficulty" Grid.Column="1" Background ="Transparent" HorizontalAlignment="Center" FontSize="18"/>
+                    <TextBlock x:Name="dLabel" Text="Difficulty" Grid.Column="1" Background ="Transparent" HorizontalAlignment="Center" FontSize="18"/>
                     <Button x:Name="dButtonMinus" Content="-" Grid.Column="0" Click="dButtonMinus_Click"/>
                 </Grid>
 
