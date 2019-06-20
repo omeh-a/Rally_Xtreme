@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SourceFile>C:/Users/Admin/Documents/GitHub/Rally_Xtreme/Game/RallyXtreme/RallyXtreme/Content/SoundFX/blip.wav</SourceFile>
+  <SourceTime>2019-06-13T18:08:17.7971717+10:00</SourceTime>
+  <DestFile>C:/Users/Admin/Documents/GitHub/Rally_Xtreme/Game/RallyXtreme/RallyXtreme/Content/bin/DesktopGL/Content/SoundFX/blip.xnb</DestFile>
+  <DestTime>2019-06-13T18:11:38.0975935+10:00</DestTime>
+  <Importer>WavImporter</Importer>
+  <ImporterTime>2018-12-09T03:35:54+11:00</ImporterTime>
+  <Processor>SoundEffectProcessor</Processor>
+  <ProcessorTime>2018-12-09T03:35:54+11:00</ProcessorTime>
+  <Parameters>
+    <Key>Quality</Key>
+    <Value>Best</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>

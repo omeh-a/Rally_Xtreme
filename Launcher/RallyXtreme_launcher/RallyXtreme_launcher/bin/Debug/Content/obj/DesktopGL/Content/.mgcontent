@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Profile>Reach</Profile>
+  <Platform>DesktopGL</Platform>
+  <Config />
+  <SourceFiles>
+    <File>C:/Users/Admin/Documents/GitHub/Rally_Xtreme/Game/RallyXtreme/RallyXtreme/Content/bg.png</File>
+    <File>C:/Users/Admin/Documents/GitHub/Rally_Xtreme/Game/RallyXtreme/RallyXtreme/Content/carexplosion.png</File>
+    <File>C:/Users/Admin/Documents/GitHub/Rally_Xtreme/Game/RallyXtreme/RallyXtreme/Content/Characters/classic/model0.png</File>
+    <File>C:/Users/Admin/Documents/GitHub/Rally_Xtreme/Game/RallyXtreme/RallyXtreme/Content/countIn.spritefont</File>
+    <File>C:/Users/Admin/Documents/GitHub/Rally_Xtreme/Game/RallyXtreme/RallyXtreme/Content/Enemies/classic/model0.png</File>
+    <File>C:/Users/Admin/Documents/GitHub/Rally_Xtreme/Game/RallyXtreme/RallyXtreme/Content/flag_normal.png</File>
+    <File>C:/Users/Admin/Documents/GitHub/Rally_Xtreme/Game/RallyXtreme/RallyXtreme/Content/fuelbar.png</File>
+    <File>C:/Users/Admin/Documents/GitHub/Rally_Xtreme/Game/RallyXtreme/RallyXtreme/Content/fuelbg.png</File>
+    <File>C:/Users/Admin/Documents/GitHub/Rally_Xtreme/Game/RallyXtreme/RallyXtreme/Content/gameover.png</File>
+    <File>C:/Users/Admin/Documents/GitHub/Rally_Xtreme/Game/RallyXtreme/RallyXtreme/Content/goodcar70x70mk1.png</File>
+    <File>C:/Users/Admin/Documents/GitHub/Rally_Xtreme/Game/RallyXtreme/RallyXtreme/Content/icon.png</File>
+    <File>C:/Users/Admin/Documents/GitHub/Rally_Xtreme/Game/RallyXtreme/RallyXtreme/Content/Internal/borderblock.png</File>
+    <File>C:/Users/Admin/Documents/GitHub/Rally_Xtreme/Game/RallyXtreme/RallyXtreme/Content/Internal/dirtyRoadBordered.png</File>
+    <File>C:/Users/Admin/Documents/GitHub/Rally_Xtreme/Game/RallyXtreme/RallyXtreme/Content/Internal/File.spritefont</File>
+    <File>C:/Users/Admin/Documents/GitHub/Rally_Xtreme/Game/RallyXtreme/RallyXtreme/Content/Internal/wallBordered.png</File>
+    <File>C:/Users/Admin/Documents/GitHub/Rally_Xtreme/Game/RallyXtreme/RallyXtreme/Content/logo.png</File>
+    <File>C:/Users/Admin/Documents/GitHub/Rally_Xtreme/Game/RallyXtreme/RallyXtreme/Content/Maps/env_thirteenfourteen/bg.png</File>
+    <File>C:/Users/Admin/Documents/GitHub/Rally_Xtreme/Game/RallyXtreme/RallyXtreme/Content/Music/too-cool.mp3</File>
+    <File>C:/Users/Admin/Documents/GitHub/Rally_Xtreme/Game/RallyXtreme/RallyXtreme/Content/playerlose.png</File>
+    <File>C:/Users/Admin/Documents/GitHub/Rally_Xtreme/Game/RallyXtreme/RallyXtreme/Content/SoundFX/bang.wav</File>
+    <File>C:/Users/Admin/Documents/GitHub/Rally_Xtreme/Game/RallyXtreme/RallyXtreme/Content/SoundFX/blip.wav</File>
+    <File>C:/Users/Admin/Documents/GitHub/Rally_Xtreme/Game/RallyXtreme/RallyXtreme/Content/TestFont.spritefont</File>
+  </SourceFiles>
+  <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+  </DestFiles>
+</SourceFileCollection>

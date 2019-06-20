@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<Map xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <name>thirteenfourteen</name>
+  <imgPath>c:/Windows/Users/matth/rallyx</imgPath>
+  <gridX>13</gridX>
+  <gridY>14</gridY>
+  <enemyNumber>2</enemyNumber>
+  <difficulty>1</difficulty>
+</Map>
